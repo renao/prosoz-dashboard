@@ -1,15 +1,11 @@
 $background-color: rgba(167, 212, 236, 0.4); 
-$days-color:       #fff;
-$board-color:      rgba(255, 255, 255, 0.7);
-$sprint-color:     rgba(255, 255, 255, 0.7);
+$days-color: #fff;
+$board-color: rgba(255, 255, 255, 0.7);
+$sprint-color: rgba(255, 255, 255, 0.7);
 $updated-at-color: rgba(0, 0, 0, 0.3);
 
 .widget-jira-sprint-board-status {
   background-color: $background-color;
-
-  .board {
-    color: $board-color;
-  }
 
   .row
   {
