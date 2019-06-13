@@ -4,39 +4,59 @@ $board-color: rgba(255, 255, 255, 0.7);
 $sprint-color: rgba(255, 255, 255, 0.7);
 $updated-at-color: rgba(0, 0, 0, 0.3);
 
+$states: 4;
+$column-width: 100% / $states;
+
+
 .widget-jira-sprint-board-status {
   background-color: $background-color;
 
-  .row
-  {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    border-spacing: 10px;
-  }
+  .sprint-status {
+    display: grid;
+    grid-template-columns: repeat($states, $column-width);
+    grid-template-rows: 100%;
 
-  .column
-  {
-    display: table-cell;
-  }
+    .sprint-status-column {
+      display: flex;
+      align-items: end;
+      flex-flow: column;
 
-  .column-big
-  {
-    display: table-cell;
-    font-size: 80px;
-    font-weight: bold;
-  }
+      .sprint-state-icon {
+        font-size: 4rem;
+        width: 100%;
+      }
 
-  .column-medium
-  {
-    display: table-cell;
-    font-size: 40px;
-    font-weight: bold;
-  }
+      .sprint-state-label {
+        width: 100%;
+        text-align: center;
+        margin-top: .4rem;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+      }
 
-  .column-small
-  {
-    display: table-cell;
-    font-size: 25px;
+      .sprint-state-total-sp {
+        width: 100%;
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1.44;
+
+        &::after {
+          content: " Story Points";
+        }
+      }
+
+      .sprint-state-total-tickets {
+        width: 100%;
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1.44;
+
+        &::after {
+          content: " Tickets";
+        }
+
+
+      }
+    }
   }
 }

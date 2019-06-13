@@ -1,45 +1,59 @@
-<div class="row">
-    <div class="column">
-        <i class="fa fa-tasks" style="font-size: 4rem" aria-hidden="true"></i>
+<div class="sprint-status">
+    <div class="sprint-status-column">
+        <div class="sprint-state-icon">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+        </div>
+        <div class="sprint-state-label">
+            Backlog
+        </div>
+        <div class="sprint-state-total-tickets" data-bind="toDoCount">
+            …
+        </div>
+        <div class="sprint-state-total-sp" data-bind="toDoSP">
+            …
+        </div>
     </div>
-    <div class="column">
-        <i class="fa fa-laptop" style="font-size: 4rem" aria-hidden="true"></i>
+    <div class="sprint-status-column">
+        <div class="sprint-state-icon">
+            <i class="fa fa-laptop" aria-hidden="true"></i>
+        </div>
+        <div class="sprint-state-label">
+            In Arbeit
+        </div>
+        <div class="sprint-state-total-tickets" data-bind="inProgressSP">
+            …
+        </div>
+        <div class="sprint-state-total-sp" data-bind="inProgressSP">
+            …
+        </div>
     </div>
-    <!--<div class="column"><i class="fa fa-file-code-o" aria-hidden="true"></i></div>-->
-    <div class="column">
-        <i class="fa fa-search" style="font-size: 4rem" aria-hidden="true"></i>
+    <div class="sprint-status-column">
+        <div class="sprint-state-icon">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+        <div class="sprint-state-label">
+            Im Test
+        </div>
+        <div class="sprint-state-total-tickets" data-bind="inTestCount">
+            …
+        </div>
+        <div class="sprint-state-total-sp"  data-bind="inTestSP">
+            …
+        </div>
     </div>
-    <div class="column">
-        <i class="fa fa-diamond" style="font-size: 4rem" aria-hidden="true"></i>
+    <div class="sprint-status-column">
+        <div class="sprint-state-icon">
+                <i class="fa fa-diamond" aria-hidden="true"></i>
+        </div>
+        <div class="sprint-state-label">
+            Erledigt
+        </div>
+        <div class="sprint-state-total-tickets" data-bind="doneCount">
+            …
+        </div>
+        <div class="sprint-state-total-sp" data-bind="doneSP">
+            …
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="column-small">
-        Backlog
-    </div>
-    <div class="column-small">
-        In Arbeit
-    </div>
-    <!-- <div class="column-small">Code Review</div> -->
-    <div class="column-small">
-        Im Test
-    </div>
-    <div class="column-small">
-        Fertig
-    </div>    
-</div>
-<div class="row">
-    <div class="column-big" data-bind="toDoSP"></div>
-    <div class="column-big" data-bind="inProgressSP"></div>
-    <!-- <div class="column-big" data-bind="inReviewSP"></div> -->
-    <div class="column-big" data-bind="inTestSP"></div>
-    <div class="column-big" data-bind="doneSP"></div>   
-</div>
-<div class="row">
-    <div class="column-medium" data-bind="toDoCount"></div>
-    <div class="column-medium" data-bind="inProgressCount"></div>
-    <!-- <div class="column-medium" data-bind="inReviewCount"></div> -->
-    <div class="column-medium" data-bind="inTestCount"></div>
-    <div class="column-medium" data-bind="doneCount"></div>   
 </div>
 
