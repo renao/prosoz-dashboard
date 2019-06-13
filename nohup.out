@@ -1,0 +1,11 @@
+172.21.8.171 - - [08/Jun/2019:13:56:30 +0200] "GET / HTTP/1.1" 302 - 0.0117
+172.21.8.171 - - [08/Jun/2019:13:56:30 +0200] "GET /produktionbauen HTTP/1.1" 200 1521 0.0085
+172.21.8.171 - - [08/Jun/2019:13:56:30 +0200] "GET /views/clock.html HTTP/1.1" 200 53 0.0016
+172.21.8.171 - - [08/Jun/2019:13:56:30 +0200] "GET /public/favicon.ico HTTP/1.1" 404 683 0.0004
+172.21.8.171 - - [08/Jun/2019:13:56:32 +0200] "GET /events HTTP/1.1" 200 - 1.8225
+Thin web server (v1.7.2 codename Bachmanity)
+Maximum connections set to 1024
+Listening on 0.0.0.0:8080, CTRL+C to stop
+Restarting ...
+Waiting for 2 connection(s) to finish, can take up to 30 sec, CTRL+C to stop now
+172.21.8.171 - - [08/Jun/2019:13:56:33 +0200] "GET /produktionbauen HTTP/1.1" 200 1521 0.0029
