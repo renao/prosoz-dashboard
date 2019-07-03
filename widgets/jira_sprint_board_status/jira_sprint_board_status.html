@@ -20,7 +20,7 @@
         <div class="sprint-state-label">
             In Arbeit
         </div>
-        <div class="sprint-state-total-tickets" data-bind="inProgressSP">
+        <div class="sprint-state-total-tickets" data-bind="inProgressCount">
             …
         </div>
         <div class="sprint-state-total-sp" data-bind="inProgressSP">
@@ -30,6 +30,20 @@
     <div class="sprint-status-column">
         <div class="sprint-state-icon">
             <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+        <div class="sprint-state-label">
+            Im Review
+        </div>
+        <div class="sprint-state-total-tickets" data-bind="inReviewCount">
+            …
+        </div>
+        <div class="sprint-state-total-sp" data-bind="inProgressSP">
+            …
+        </div>
+    </div>
+    <div class="sprint-status-column">
+        <div class="sprint-state-icon">
+            <i class="fa fa-flask" aria-hidden="true"></i>
         </div>
         <div class="sprint-state-label">
             Im Test
