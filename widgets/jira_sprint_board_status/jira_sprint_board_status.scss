@@ -4,25 +4,40 @@ $board-color: rgba(255, 255, 255, 0.7);
 $sprint-color: rgba(255, 255, 255, 0.7);
 $updated-at-color: rgba(0, 0, 0, 0.3);
 
-$states: 5;
-$column-width: 100% / $states;
+
+$states: 'explanation','total','backlog', 'in-progress', 'in-review', 'in-test', 'done';
+$column-width: 100% / length($states);
 
 
 .widget-jira-sprint-board-status {
   background-color: $background-color;
 
   .sprint-status {
+    height: 100%;
     display: grid;
-    grid-template-columns: repeat($states, $column-width);
+    grid-template-columns: repeat(length($states), $column-width);
     grid-template-rows: 100%;
 
+
     .sprint-status-column {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
       display: flex;
       align-items: end;
       flex-flow: column;
+      justify-content: flex-end;
+
+      &:nth-child(odd) {
+        background: rgba(255,255,255,0.05);
+      }
+
+      &:nth-child(1), &:nth-child(2) {
+        background: rgba(255,255,255,0.3);
+      }
+
 
       .sprint-state-icon {
-        font-size: 4rem;
+        font-size: 2rem;
         width: 100%;
       }
 
@@ -34,28 +49,26 @@ $column-width: 100% / $states;
         font-size: 1.2rem;
       }
 
-      .sprint-state-total-sp {
+      .sprint-state-value {
         width: 100%;
         text-align: center;
-        font-size: 1rem;
+        font-size: 1.3rem;
         line-height: 1.44;
-
-        &::after {
-          content: " Story Points";
-        }
+        background: rgba(255,255,255,0.4);
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+        height: 2rem;
       }
 
-      .sprint-state-total-tickets {
+      .sprint-state-explanation {
         width: 100%;
         text-align: center;
-        font-size: 1rem;
+        font-size: .8rem;
         line-height: 1.44;
-
-        &::after {
-          content: " Tickets";
-        }
-
-
+        background: rgba(255,255,255,0.4);
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+        height: 2rem;
       }
     }
   }

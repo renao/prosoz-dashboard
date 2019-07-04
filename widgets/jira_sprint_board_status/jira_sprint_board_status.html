@@ -1,4 +1,40 @@
 <div class="sprint-status">
+
+        <div class="sprint-status-column">
+            <div class="sprint-state-explanation">
+                Tickets
+            </div>
+            <div class="sprint-state-explanation">
+                Story Points
+            </div>
+            <div class="sprint-state-explanation">
+                TaskForce
+            </div>
+            <div class="sprint-state-explanation">
+                Kleinkram
+            </div>
+        </div>
+    <div class="sprint-status-column">
+        <div class="sprint-state-icon">
+            ∑
+        </div>
+        <div class="sprint-state-label">
+            Sprint 30
+        </div>
+        <div class="sprint-state-value" data-bind="toDoCount">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="toDoSP">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="toDoTaskForce">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="toDoKleinkram">
+                …
+        </div>
+    </div>
+    
     <div class="sprint-status-column">
         <div class="sprint-state-icon">
             <i class="fa fa-tasks" aria-hidden="true"></i>
@@ -6,12 +42,18 @@
         <div class="sprint-state-label">
             Backlog
         </div>
-        <div class="sprint-state-total-tickets" data-bind="toDoCount">
+        <div class="sprint-state-value" data-bind="toDoCount">
             …
         </div>
-        <div class="sprint-state-total-sp" data-bind="toDoSP">
+        <div class="sprint-state-value" data-bind="toDoSP">
             …
         </div>
+        <div class="sprint-state-value" data-bind="toDoTaskForce">
+                …
+            </div>
+            <div class="sprint-state-value" data-bind="toDoKleinkram">
+                    …
+            </div>
     </div>
     <div class="sprint-status-column">
         <div class="sprint-state-icon">
@@ -20,11 +62,17 @@
         <div class="sprint-state-label">
             In Arbeit
         </div>
-        <div class="sprint-state-total-tickets" data-bind="inProgressCount">
+        <div class="sprint-state-value" data-bind="inProgressCount">
             …
         </div>
-        <div class="sprint-state-total-sp" data-bind="inProgressSP">
+        <div class="sprint-state-value" data-bind="inProgressSP">
             …
+        </div>
+        <div class="sprint-state-value" data-bind="inProgressTaskForce">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="inProgressKleinkram">
+                …
         </div>
     </div>
     <div class="sprint-status-column">
@@ -34,10 +82,16 @@
         <div class="sprint-state-label">
             Im Review
         </div>
-        <div class="sprint-state-total-tickets" data-bind="inReviewCount">
+        <div class="sprint-state-value" data-bind="inReviewCount">
             …
         </div>
-        <div class="sprint-state-total-sp" data-bind="inProgressSP">
+        <div class="sprint-state-value" data-bind="inReviewSP">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="inReviewTaskForce">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="inReviewKleinkram">
             …
         </div>
     </div>
@@ -48,11 +102,17 @@
         <div class="sprint-state-label">
             Im Test
         </div>
-        <div class="sprint-state-total-tickets" data-bind="inTestCount">
+        <div class="sprint-state-value" data-bind="inTestCount">
             …
         </div>
-        <div class="sprint-state-total-sp"  data-bind="inTestSP">
+        <div class="sprint-state-value"  data-bind="inTestSP">
             …
+        </div>
+        <div class="sprint-state-value" data-bind="inTestTaskForce">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="inTestKleinkram">
+                …
         </div>
     </div>
     <div class="sprint-status-column">
@@ -62,10 +122,16 @@
         <div class="sprint-state-label">
             Erledigt
         </div>
-        <div class="sprint-state-total-tickets" data-bind="doneCount">
+        <div class="sprint-state-value" data-bind="doneCount">
             …
         </div>
-        <div class="sprint-state-total-sp" data-bind="doneSP">
+        <div class="sprint-state-value" data-bind="doneSP">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="doneTaskForce">
+            …
+        </div>
+        <div class="sprint-state-value" data-bind="doneKleinkram">
             …
         </div>
     </div>
