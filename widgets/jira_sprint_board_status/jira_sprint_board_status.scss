@@ -62,7 +62,10 @@ $column-width: 100% / length($states);
 
       .sprint-state-explanation {
         width: 100%;
-        text-align: center;
+        display: flex;
+        align-content: space-around;
+        align-items: center;
+        justify-content: flex-end;
         font-size: .8rem;
         line-height: 1.44;
         background: rgba(255,255,255,0.4);
