@@ -1,0 +1,1 @@
+class Dashing.CurrentVersion extends Dashing.Widget
