@@ -139,13 +139,15 @@ SCHEDULER.every '1h', :first_in => 0 do
   send_event('boardStatus', {
       toDoCount: issue_count_array[0],
       inProgressCount: issue_count_array[1],
-      inTestCount: issue_count_array[2],
-      doneCount: issue_count_array[3],
+      inReviewCount: issue_count_array[2],
+      inTestCount: issue_count_array[3],
+      doneCount: issue_count_array[4],
 
       toDoSP: issue_sp_count_array[0],
       inProgressSP: issue_sp_count_array[1],
-      inTestSP: issue_sp_count_array[2],
-      doneSP: issue_sp_count_array[3],
+      inReviewSP: issue_sp_count_array[2],
+      inTestSP: issue_sp_count_array[3],
+      doneSP: issue_sp_count_array[4]
   })
 end
 
