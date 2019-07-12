@@ -19,6 +19,8 @@ $background-warning-color-1: #eeae32;
 $background-warning-color-2: #ff9618;
 $text-warning-color: #fff;
 
+$widget-base-background-color: rgba(167, 212, 236, 0.4);
+
 @-webkit-keyframes status-warning-background {
   0%   { background-color: $background-warning-color-1; }
   50%  { background-color: $background-warning-color-2; }
@@ -119,19 +121,6 @@ h3 {
   margin: 0px auto;
 }
 
-.icon-background {
-  pointer-events: none;
-  width: 100%!important;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0.1;
-  font-size: 275px;
-  text-align: center;
-  margin-top: 82px;
-}
-
 .list-nostyle {
   list-style: none;
 }
@@ -152,6 +141,7 @@ h3 {
   height: inherit;
   display: table-cell;
   vertical-align: middle;
+  background-color: $widget-base-background-color;
 }
 
 .widget.status-warning {
@@ -259,3 +249,26 @@ h3 {
 .clearfix:after { clear: both; }
 .clearfix { zoom: 1; }
 
+
+$widget-primary-font-size: 4rem;
+$widget-secondary-font-size: 1.7rem;
+$widget-primary-font-weight: 600;
+$widget-secondary-font-weight: 300;
+
+.widget_info__primary {
+  font-size: $widget-primary-font-size;
+  color: $text-color;
+  font-weight: $widget-primary-font-weight;
+}
+
+.widget_info__secondary {
+  font-size: $widget-secondary-font-size;
+  color: $text-color;
+  font-weight: $widget-secondary-font-weight;
+}
+
+.widget_title {
+  font-size: $widget-secondary-font-size;
+  color: $text-color;
+  font-weight: $widget-secondary-font-weight;
+}
