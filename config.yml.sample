@@ -1,0 +1,13 @@
+jira:
+  username: jira_user
+  password: jira_user_password
+  url: http://jira.uri/
+  endpoint: http://jira.uri/rest/api/2/
+  view: 2
+  customfield:
+    storypoints: customfield_10107
+
+confluence:
+  username: confluence_user
+  password: confluence_user_password
+  endpoint: http://confluence.uri/rest/api/
