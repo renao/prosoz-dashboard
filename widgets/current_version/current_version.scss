@@ -2,4 +2,18 @@ $background-color:  rgba(167, 212, 236, 0.3);
 
 .widget-current-version {
   background-color: $background-color;
+
+  .current_version__title {
+    //color: rgba(255,255,255,1);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-weight: normal;
+  }
+
+  .current_version__description {
+    color: rgba(255,255,255,.4);
+    font-size: 1.7rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
 }
