@@ -19,7 +19,11 @@ SCHEDULER.every '60s' do
 
   version = latest_released_version body
 
-  send_event('currentVersion', { version_name: version['name'] })
+  puts version
+
+  send_event('currentVersion', { 
+    version_name: version['name'],
+    version_description: version['description'] })
 end
 
 def latest_released_version(versions_json)
