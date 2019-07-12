@@ -1,15 +1,21 @@
 require 'httparty'
 require 'json'
 
-retrieve_version_uri = 'https://graph.facebook.com'
+config = YAML.load_file('config.yml')
+USERNAME = config['confluence']['username']
+PASSWORD = config['confluence']['password']
+ENDPOINT = config['confluence']['endpoint']
 
-SCHEDULER.every '3s' do
-  response_body = {
-    "version": "2019.8.1"
-  }.to_json
+confluence_uri = "#{ENDPOINT}content/8389025?expand=body.storage"
 
-  response = HTTParty.get(retrieve_version_uri)
+SCHEDULER.every '30s' do
+  response = HTTParty.get(confluence_uri, {
+    :basic_auth => {
+      :username => USERNAME
+      :password => PASSWORD
+    }
+  })
   body = JSON.parse(response.body)
 
-  send_event('currentVersion', { version_name: body['error']['code'] })
+  send_event('currentVersion', { version_name: body['body']['storage']['value'].gsub(/<\/?[^>]*>/, "") })
 end
