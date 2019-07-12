@@ -11,7 +11,7 @@ confluence_uri = "#{ENDPOINT}content/8389025?expand=body.storage"
 SCHEDULER.every '30s' do
   response = HTTParty.get(confluence_uri, {
     :basic_auth => {
-      :username => USERNAME
+      :username => USERNAME,
       :password => PASSWORD
     }
   })
