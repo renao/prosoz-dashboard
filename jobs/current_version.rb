@@ -4,12 +4,12 @@ require 'json'
 config = YAML.load_file('config.yml')
 USERNAME = config['confluence']['username']
 PASSWORD = config['confluence']['password']
-ENDPOINT = config['confluence']['endpoint']
+ENDPOINT = config['jira']['endpoint']
 
-confluence_uri = "#{ENDPOINT}content/8389025?expand=body.storage"
+versions_uri = "#{ENDPOINT}project/BAUEN/versions"
 
-SCHEDULER.every '30s' do
-  response = HTTParty.get(confluence_uri, {
+SCHEDULER.every '60s' do
+  response = HTTParty.get(versions_uri, {
     :basic_auth => {
       :username => USERNAME,
       :password => PASSWORD
@@ -17,5 +17,12 @@ SCHEDULER.every '30s' do
   })
   body = JSON.parse(response.body)
 
-  send_event('currentVersion', { version_name: body['body']['storage']['value'].gsub(/<\/?[^>]*>/, "") })
+  version = latest_released_version body
+
+  send_event('currentVersion', { version_name: version['name'] })
+end
+
+def latest_released_version(versions_json)
+  released_versions = versions_json.select { |v| v['released'] == true }
+  released_versions.last
 end
