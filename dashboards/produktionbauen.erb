@@ -1,9 +1,8 @@
 <script type='text/javascript'>
 $(function() {
   // These settings override the defaults set in application.coffee. You can do this on a per dashboard basis.
-    Dashing.gridsterLayout('[{"col":4,"row":1,"size_x":1,"size_y":1},{"col":1,"row":1,"size_x":1,"size_y":1},{"col":2,"row":1,"size_x":2,"size_y":1}]')
     Dashing.widget_base_dimensions = [370, 340]
-  Dashing.numColumns = 5
+  Dashing.numColumns = 4
 });
 </script>
 
@@ -11,18 +10,18 @@ $(function() {
 
 <div class="gridster">
   <ul>
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+    <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
       <div data-view="Clock"></div>
     </li>
 
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+    <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
       <div data-id="view1" data-view="JiraSprintRemainingDays"></div>
     </li>
 
-    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+    <li data-row="2" data-col="2" data-sizex="2" data-sizey="1">
     <div data-id="boardStatus" data-view="JiraSprintBoardStatus"></div>
   </li>
-  <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+  <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
     <div data-id="currentVersion" data-view="CurrentVersion"></div>
   </li>
   </ul>
