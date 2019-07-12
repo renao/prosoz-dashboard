@@ -8,7 +8,7 @@ ENDPOINT = config['jira']['endpoint']
 
 versions_uri = "#{ENDPOINT}/project/BAUEN/versions"
 
-SCHEDULER.every '60s' :first_in => 0 do
+SCHEDULER.every '60s', :first_in => 0 do
   response = HTTParty.get(versions_uri, {
     :basic_auth => {
       :username => USERNAME,
