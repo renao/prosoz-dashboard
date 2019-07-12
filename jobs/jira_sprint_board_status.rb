@@ -124,7 +124,7 @@ def get_response(path)
   return response
 end
 
-SCHEDULER.every '1h', :first_in => 0 do
+SCHEDULER.every '60s', :first_in => 0 do
   issue_count_array = Array.new(5, 0)
   issue_sp_count_array = Array.new(5, 0)
 
