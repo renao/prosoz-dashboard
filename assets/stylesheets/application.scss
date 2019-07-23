@@ -272,3 +272,13 @@ $widget-secondary-font-weight: 300;
   color: $text-color;
   font-weight: $widget-secondary-font-weight;
 }
+
+.static-prosoz-logo {
+  background: unset;
+
+  img {
+    transform: translateY(1rem);
+    width: 80%;
+    height: auto;
+  }
+}
