@@ -137,17 +137,36 @@ SCHEDULER.every '60s', :first_in => 0 do
   end
 
   send_event('boardStatus', {
-      toDoCount: issue_count_array[0],
-      inProgressCount: issue_count_array[1],
-      inReviewCount: issue_count_array[2],
-      inTestCount: issue_count_array[3],
-      doneCount: issue_count_array[4],
+      sprintName: "Sprintname",
+      sprintTickets: "12",
+      sprintSP: "81",
+      sprintTaskForce: "0",
+      sprintKleinkram: "14",
 
-      toDoSP: issue_sp_count_array[0],
+      backlogTickets: issue_count_array[0],
+      backlogSP: issue_sp_count_array[0],
+      backlogTaskForce: "1",
+      backlogKleinkram: "1",
+
+      inProgressTickets: issue_count_array[1],
       inProgressSP: issue_sp_count_array[1],
+      inProgressTaskForce: "2",
+      inProgressKleinkram: "2",
+
+      inReviewTickets: issue_count_array[2],
       inReviewSP: issue_sp_count_array[2],
+      inReviewTaskForce: "3",
+      inReviewKleinkram: "3",
+
+      inTestTickets: issue_count_array[3],
       inTestSP: issue_sp_count_array[3],
-      doneSP: issue_sp_count_array[4]
+      inTestTaskForce: "4",
+      inTestKleinkram: "4",
+
+      doneTickets: issue_count_array[4],
+      doneSP: issue_sp_count_array[4],
+      doneTaskForce: "5",
+      doneKleinkram: "5"
   })
 end
 
