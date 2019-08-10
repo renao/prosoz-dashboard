@@ -124,49 +124,102 @@ def get_response(path)
   return response
 end
 
-SCHEDULER.every '60s', :first_in => 0 do
-  issue_count_array = Array.new(5, 0)
-  issue_sp_count_array = Array.new(5, 0)
+def collect_sprint_info(sprint_json)
+  {
+    :sprint_name => "Sprintname",
+    :sprint_tickets => "-",
+    :sprint_sp => "-",
+    :sprint_task_force => "-",
+    :sprint_kleinkram => "-"
+  }
+end
+
+def dummy_state_info
+  {
+    :tickets => "-",
+    :story_points => "-",
+    :task_force => "-",
+    :kleinkram => "-"
+  }
+end
+
+def retrieve_backlog_infos(sprint_json)
+  dummy_state_info
+end
+
+def retrieve_in_progress_infos(sprint_json)
+  dummy_state_info
+end
+
+def retrieve_in_review_infos(sprint_json)
+  dummy_state_info
+end
+
+def retrieve_in_test_infos(sprint_json)
+  dummy_state_info
+end
+
+def retrieve_done_infos(sprint_json)
+  dummy_state_info
+end
+
+
+SCHEDULER.every '8s', :first_in => 0 do
+  #issue_count_array = Array.new(5, 0)
+  #issue_sp_count_array = Array.new(5, 0)
+
+  sprint_info = Hash.new(0)
+  backlog = Hash.new(0)
+  in_progress = Hash.new(0)
+  in_review = Hash.new(0)
+  in_test = Hash.new(0)
+  done = Hash.new(0)
 
   view_json = get_view_for_viewid(VIEW_ID)
   if (view_json)
     sprint_json = get_active_sprint_for_view(view_json['id'])
     if (sprint_json)
-      get_issues_per_status(view_json['id'], sprint_json['id'], issue_count_array, issue_sp_count_array)
+      sprint_info = collect_sprint_info(sprint_json)
+      backlog = retrieve_backlog_infos(sprint_json)
+      in_progress = retrieve_in_progress_infos(sprint_json)
+      in_review = retrieve_in_review_infos(sprint_json)
+      in_test = retrieve_in_test_infos(sprint_json)
+      done = retrieve_done_infos(sprint_json)
+
+      # get_issues_per_status(view_json['id'], sprint_json['id'], issue_count_array, issue_sp_count_array)
     end
   end
-
   send_event('boardStatus', {
-      sprintName: "Sprintname",
-      sprintTickets: "12",
-      sprintSP: "81",
-      sprintTaskForce: "0",
-      sprintKleinkram: "14",
+      sprintName: sprint_info[:sprint_name],
+      sprintTickets: sprint_info[:sprint_tickets],
+      sprintSP: sprint_info[:sprint_sp],
+      sprintTaskForce: sprint_info[:sprint_task_force],
+      sprintKleinkram: sprint_info[:sprint_kleinkram],
 
-      backlogTickets: issue_count_array[0],
-      backlogSP: issue_sp_count_array[0],
-      backlogTaskForce: "1",
-      backlogKleinkram: "1",
+      backlogTickets: backlog[:tickets],
+      backlogSP: backlog[:story_points],
+      backlogTaskForce: backlog[:task_force],
+      backlogKleinkram: backlog[:kleinkram],
 
-      inProgressTickets: issue_count_array[1],
-      inProgressSP: issue_sp_count_array[1],
-      inProgressTaskForce: "2",
-      inProgressKleinkram: "2",
+      inProgressTickets: in_progress[:tickets],
+      inProgressSP: in_progress[:story_points],
+      inProgressTaskForce: in_progress[:task_force],
+      inProgressKleinkram: in_progress[:kleinkram],
 
-      inReviewTickets: issue_count_array[2],
-      inReviewSP: issue_sp_count_array[2],
-      inReviewTaskForce: "3",
-      inReviewKleinkram: "3",
+      inReviewTickets: in_review[:tickets],
+      inReviewSP: in_review[:story_points],
+      inReviewTaskForce: in_review[:task_force],
+      inReviewKleinkram: in_review[:kleinkram],
 
-      inTestTickets: issue_count_array[3],
-      inTestSP: issue_sp_count_array[3],
-      inTestTaskForce: "4",
-      inTestKleinkram: "4",
+      inTestTickets: in_test[:tickets],
+      inTestSP: in_test[:story_points],
+      inTestTaskForce: in_test[:task_force],
+      inTestKleinkram: in_test[:kleinkram],
 
-      doneTickets: issue_count_array[4],
-      doneSP: issue_sp_count_array[4],
-      doneTaskForce: "5",
-      doneKleinkram: "5"
+      doneTickets: done[:tickets],
+      doneSP: done[:story_points],
+      doneTaskForce: done[:task_force],
+      doneKleinkram: done[:kleinkram]
   })
 end
 
