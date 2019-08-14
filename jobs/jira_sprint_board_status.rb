@@ -134,7 +134,7 @@ def empty_state
   }
 end
 
-SCHEDULER.every '8s', :first_in => 0 do
+SCHEDULER.every '20s', :first_in => 0 do
 
   sprint_name = ''
   sprint_info = Hash.new(0)
