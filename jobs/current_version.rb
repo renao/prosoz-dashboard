@@ -1,32 +1,45 @@
 require 'httparty'
 require 'json'
 
-config = YAML.load_file('config.yml')
-USERNAME = config['confluence']['username']
-PASSWORD = config['confluence']['password']
-ENDPOINT = config['jira']['endpoint']
+class CurrentVersion
 
-versions_uri = "#{ENDPOINT}/project/BAUEN/versions"
+  def initialize(config)
+    @config = config
+  end
 
-SCHEDULER.every '60s', :first_in => 0 do
-  response = HTTParty.get(versions_uri, {
-    :basic_auth => {
-      :username => USERNAME,
-      :password => PASSWORD
+  def retrieve_latest_version
+    response = HTTParty.get(versions_info_url, {
+      :basic_auth => {
+        :username => @config['jira']['username'],
+        :password => @config['jira']['password']
+      }
+    })
+    body = JSON.parse(response.body)
+    version = latest_released_version body
+
+    { 
+      version_name: version['name'],
+      version_description: version['description']
     }
-  })
-  body = JSON.parse(response.body)
+  end
 
-  version = latest_released_version body
+  private
 
-  puts version
-
-  send_event('currentVersion', { 
-    version_name: version['name'],
-    version_description: version['description'] })
+  def latest_released_version(versions_json)
+    released_versions = versions_json.select { |v| v['released'] == true }
+    released_versions.last
+  end
+  
+  def versions_info_url
+    "#{@config['jira']['endpoint']}/project/BAUEN/versions"
+  end
 end
 
-def latest_released_version(versions_json)
-  released_versions = versions_json.select { |v| v['released'] == true }
-  released_versions.last
+config = YAML.load_file('config.yml')
+current_version = CurrentVersion.new config
+
+SCHEDULER.every '60s', :first_in => 0 do
+  
+  version_event = current_version.retrieve_latest_version
+  send_event('currentVersion', version_event)
 end
