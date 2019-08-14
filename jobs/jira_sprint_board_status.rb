@@ -12,7 +12,12 @@ JIRA_URI = URI.parse(config['jira']['url'])
 STORY_POINTS_CUSTOMFIELD_CODE = config['jira']['customfield']['storypoints']
 VIEW_ID = config['jira']['view']
 
-# gets the view for a given view id
+BACKLOG_STATE_ID = config['jira']['states']['backlog']
+IN_PROGRESS_STATE_ID = config['jira']['states']['in_progress']
+IN_REVIEW_STATE_ID = config['jira']['states']['in_review']
+IN_TEST_STATE_ID = config['jira']['states']['in_test']
+DONE_STATE_ID = config['jira']['states']['done']
+
 def get_view_for_viewid(view_id)
   http = create_http
   request = create_request("/rest/greenhopper/1.0/rapidviews/list")
@@ -25,7 +30,6 @@ def get_view_for_viewid(view_id)
   end
 end
 
-# gets the active sprint for the view
 def get_active_sprint_for_view(view_id)
   http = create_http
   request = create_request("/rest/greenhopper/1.0/sprintquery/#{view_id}")
@@ -38,65 +42,18 @@ def get_active_sprint_for_view(view_id)
   end
 end
 
-# gets issues in each status
-def get_issues_per_status(view_id, sprint_id, issue_count_array, issue_sp_count_array)
-  current_start_at = 0
-
+def get_sprint_issues(view_id, sprint_id)
+  offset = 0
+  issues = Array.new(0)
   begin
-    response = get_response("/rest/agile/1.0/board/#{view_id}/sprint/#{sprint_id}/issue?startAt=#{current_start_at}")
+    response = get_response("/rest/agile/1.0/board/#{view_id}/sprint/#{sprint_id}/issue?startAt=#{offset}")
     page_result = JSON.parse(response.body)
-    issue_array = page_result['issues']
-
-    issue_array.each do |issue|
-      accumulate_issue_information(issue, issue_count_array, issue_sp_count_array)
-    end
-
-    current_start_at = current_start_at + page_result['maxResults']
-  end while current_start_at < page_result['total']
+    issues.concat page_result['issues']
+    offset = offset + page_result['maxResults']
+  end while offset < page_result['total']
+  issues
 end
-
-# accumulate issue information
-def accumulate_issue_information(issue, issue_count_array, issue_sp_count_array)
-  case issue['fields']['status']['id']
-    when "1", "2", "10103"
-      if !issue['fields']['issuetype']['subtask']
-        issue_count_array[0] = issue_count_array[0] + 1
-      end
-      if !issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE].nil?
-        issue_sp_count_array[0] = issue_sp_count_array[0] + issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE]
-      end
-    when "3", "4"
-      if !issue['fields']['issuetype']['subtask']
-        issue_count_array[1] = issue_count_array[1] + 1
-      end
-      if !issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE].nil?
-        issue_sp_count_array[1] = issue_sp_count_array[1] + issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE]
-      end
-    when "10105"
-      if !issue['fields']['issuetype']['subtask']
-        issue_count_array[2] = issue_count_array[2] + 1
-      end
-      if !issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE].nil?
-        issue_sp_count_array[2] = issue_sp_count_array[2] + issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE]
-      end
-    when "5", "6", "10001", "10102"
-      if !issue['fields']['issuetype']['subtask']
-        issue_count_array[3] = issue_count_array[3] + 1
-      end
-      if !issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE].nil?
-        issue_sp_count_array[3] = issue_sp_count_array[3] + issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE]
-      end
-    else
-      puts "ERROR: wrong issue status #{issue['fields']['status']['id']}" 
-  end
-
-  issue_count_array[4] = issue_count_array[4] + 1
-  if !issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE].nil?
-    issue_sp_count_array[4] = issue_sp_count_array[4] + issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE]
-  end
-end
-
-# create HTTP
+ 
 def create_http
   http = Net::HTTP.new(JIRA_URI.host, JIRA_URI.port)
   if ('https' == JIRA_URI.scheme)
@@ -106,7 +63,6 @@ def create_http
   return http
 end
 
-# create HTTP request for given path
 def create_request(path)
   request = Net::HTTP::Get.new(JIRA_URI.path + path)
   if USERNAME
@@ -115,7 +71,6 @@ def create_request(path)
   return request
 end
 
-# gets the response after a request
 def get_response(path)
   http = create_http
   request = create_request(path)
@@ -124,30 +79,118 @@ def get_response(path)
   return response
 end
 
-SCHEDULER.every '60s', :first_in => 0 do
-  issue_count_array = Array.new(5, 0)
-  issue_sp_count_array = Array.new(5, 0)
+def retrieve_state_infos(sprint_issues, state_id)
+  state = empty_state
 
-  view_json = get_view_for_viewid(VIEW_ID)
-  if (view_json)
-    sprint_json = get_active_sprint_for_view(view_json['id'])
-    if (sprint_json)
-      get_issues_per_status(view_json['id'], sprint_json['id'], issue_count_array, issue_sp_count_array)
+  sprint_issues.each do |issue|
+    if is_state?(issue, state_id) && !is_subtask?(issue)
+      state[:tickets] = state[:tickets] + 1
+      state[:story_points] = state[:story_points] + story_points(issue)
+      state[:task_force] = state[:task_force] + (is_taskforce?(issue) ? 1 : 0)
+      state[:kleikram] = state[:kleinkram] + (is_kleinkram?(issue) ? 1 : 0)
     end
   end
 
-  send_event('boardStatus', {
-      toDoCount: issue_count_array[0],
-      inProgressCount: issue_count_array[1],
-      inReviewCount: issue_count_array[2],
-      inTestCount: issue_count_array[3],
-      doneCount: issue_count_array[4],
+  state
+end
 
-      toDoSP: issue_sp_count_array[0],
-      inProgressSP: issue_sp_count_array[1],
-      inReviewSP: issue_sp_count_array[2],
-      inTestSP: issue_sp_count_array[3],
-      doneSP: issue_sp_count_array[4]
+def is_subtask?(issue)
+  issue['fields']['issuetype']['subtask']
+end
+
+def is_state?(issue, expected_state_id)
+  issue['fields']['status']['id'] == expected_state_id
+end
+
+def story_points(issue)
+  !issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE].nil? ? issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE] : 0
+end
+
+def is_kleinkram?(issue)
+  issue['fields']['labels'].include?('Kleinkram')
+end
+
+def is_taskforce?(issue)
+  issue['fields']['labels'].include?('TaskForce')
+end
+
+def accumulate_sprint(*states)
+  sum = empty_state
+  states.each do |state|
+    sum[:tickets] = sum[:tickets] + state[:tickets]
+    sum[:story_points] = sum[:story_points] + state[:story_points]
+    sum[:task_force] = sum[:task_force] + state[:task_force]
+    sum[:kleinkram] = sum[:kleinkram] + state[:kleinkram]
+  end
+  sum
+end
+
+def empty_state
+  {
+    :tickets => 0,
+    :story_points => 0,
+    :task_force => 0,
+    :kleinkram => 0
+  }
+end
+
+SCHEDULER.every '20s', :first_in => 0 do
+
+  sprint_name = ''
+  sprint_info = Hash.new(0)
+  backlog = Hash.new(0)
+  in_progress = Hash.new(0)
+  in_review = Hash.new(0)
+  in_test = Hash.new(0)
+  done = Hash.new(0)
+
+  view_json = get_view_for_viewid(VIEW_ID)
+  if (view_json)
+    sprint_meta = get_active_sprint_for_view(view_json['id'])
+    if (sprint_meta)
+      sprint_issues = get_sprint_issues(view_json['id'], sprint_meta['id'])
+      sprint_name = sprint_meta['name']
+
+      backlog = retrieve_state_infos sprint_issues, BACKLOG_STATE_ID
+      in_progress = retrieve_state_infos sprint_issues, IN_PROGRESS_STATE_ID
+      in_review = retrieve_state_infos sprint_issues, IN_REVIEW_STATE_ID
+      in_test = retrieve_state_infos sprint_issues, IN_TEST_STATE_ID
+      done = retrieve_state_infos sprint_issues, DONE_STATE_ID
+
+      sprint_info = accumulate_sprint backlog, in_progress, in_review, in_test, done
+    end
+  end
+  send_event('boardStatus', {
+      sprintName: sprint_name,
+      sprintTickets: sprint_info[:tickets],
+      sprintSP: sprint_info[:story_points],
+      sprintTaskForce: sprint_info[:task_force],
+      sprintKleinkram: sprint_info[:kleinkram],
+
+      backlogTickets: backlog[:tickets],
+      backlogSP: backlog[:story_points],
+      backlogTaskForce: backlog[:task_force],
+      backlogKleinkram: backlog[:kleinkram],
+
+      inProgressTickets: in_progress[:tickets],
+      inProgressSP: in_progress[:story_points],
+      inProgressTaskForce: in_progress[:task_force],
+      inProgressKleinkram: in_progress[:kleinkram],
+
+      inReviewTickets: in_review[:tickets],
+      inReviewSP: in_review[:story_points],
+      inReviewTaskForce: in_review[:task_force],
+      inReviewKleinkram: in_review[:kleinkram],
+
+      inTestTickets: in_test[:tickets],
+      inTestSP: in_test[:story_points],
+      inTestTaskForce: in_test[:task_force],
+      inTestKleinkram: in_test[:kleinkram],
+
+      doneTickets: done[:tickets],
+      doneSP: done[:story_points],
+      doneTaskForce: done[:task_force],
+      doneKleinkram: done[:kleinkram]
   })
 end
 
