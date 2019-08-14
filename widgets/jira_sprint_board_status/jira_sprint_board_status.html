@@ -18,19 +18,19 @@
         <div class="sprint-state-icon">
             ∑
         </div>
-        <div class="sprint-state-label">
-            Sprint 30
+        <div class="sprint-state-label" data-bind="sprintName">
+                …
         </div>
-        <div class="sprint-state-value" data-bind="toDoCount">
+        <div class="sprint-state-value" data-bind="sprintTickets">
             …
         </div>
-        <div class="sprint-state-value" data-bind="toDoSP">
+        <div class="sprint-state-value" data-bind="sprintSP">
             …
         </div>
-        <div class="sprint-state-value" data-bind="toDoTaskForce">
+        <div class="sprint-state-value" data-bind="sprintTaskForce">
             …
         </div>
-        <div class="sprint-state-value" data-bind="toDoKleinkram">
+        <div class="sprint-state-value" data-bind="sprintKleinkram">
                 …
         </div>
     </div>
@@ -42,16 +42,16 @@
         <div class="sprint-state-label">
             Backlog
         </div>
-        <div class="sprint-state-value" data-bind="toDoCount">
+        <div class="sprint-state-value" data-bind="backlogTickets">
             …
         </div>
-        <div class="sprint-state-value" data-bind="toDoSP">
+        <div class="sprint-state-value" data-bind="backlogSP">
             …
         </div>
-        <div class="sprint-state-value" data-bind="toDoTaskForce">
+        <div class="sprint-state-value" data-bind="backlogTaskForce">
                 …
             </div>
-            <div class="sprint-state-value" data-bind="toDoKleinkram">
+            <div class="sprint-state-value" data-bind="backlogKleinkram">
                     …
             </div>
     </div>
@@ -62,7 +62,7 @@
         <div class="sprint-state-label">
             In Arbeit
         </div>
-        <div class="sprint-state-value" data-bind="inProgressCount">
+        <div class="sprint-state-value" data-bind="inProgressTickets">
             …
         </div>
         <div class="sprint-state-value" data-bind="inProgressSP">
@@ -82,7 +82,7 @@
         <div class="sprint-state-label">
             Im Review
         </div>
-        <div class="sprint-state-value" data-bind="inReviewCount">
+        <div class="sprint-state-value" data-bind="inReviewTickets">
             …
         </div>
         <div class="sprint-state-value" data-bind="inReviewSP">
@@ -102,7 +102,7 @@
         <div class="sprint-state-label">
             Im Test
         </div>
-        <div class="sprint-state-value" data-bind="inTestCount">
+        <div class="sprint-state-value" data-bind="inTestTickets">
             …
         </div>
         <div class="sprint-state-value"  data-bind="inTestSP">
@@ -122,7 +122,7 @@
         <div class="sprint-state-label">
             Erledigt
         </div>
-        <div class="sprint-state-value" data-bind="doneCount">
+        <div class="sprint-state-value" data-bind="doneTickets">
             …
         </div>
         <div class="sprint-state-value" data-bind="doneSP">
