@@ -62,11 +62,11 @@ end
 
 def get_sprint_issues(view_id, sprint_id)
   offset = 0
-  issues = Hash.new(0)
+  issues = Array.new(0)
   begin
     response = get_response("/rest/agile/1.0/board/#{view_id}/sprint/#{sprint_id}/issue?startAt=#{offset}")
     page_result = JSON.parse(response.body)
-    issues.merge page_result['issues']
+    issues.concat page_result['issues']
     offset = offset + page_result['maxResults']
   end while offset < page_result['total']
   issues
@@ -137,7 +137,7 @@ def get_response(path)
   return response
 end
 
-def collect_sprint_info(sprint_json)
+def collect_sprint_info(sprint_issues)
   {
     :sprint_tickets => "-",
     :sprint_sp => "-",
@@ -163,17 +163,17 @@ def retrieve_backlog_infos(sprint_issues)
     :kleinkram => 0
   }
 
-  sprint_issues.each |issue|
+  sprint_issues.each do |issue|
     if is_state?(issue, BACKLOG_STATE_ID) && !is_subtask?(issue)
-      backlog_state[:tickets] += 1
-      backlog_state[:story_points] += story_points(issue)
-      backlog_state[:task_force] += is_taskforce?(issue) ? 1 : 0
-      backlog_state[:kleikram] += is_kleinkram?(issue) ? 1 : 0
+      backlog_state[:tickets] = backlog_state[:tickets] + 1
+      backlog_state[:story_points] = backlog_state[:story_points] + story_points(issue)
+      backlog_state[:task_force] = backlog_state[:task_force] + (is_taskforce?(issue) ? 1 : 0)
+      backlog_state[:kleikram] = backlog_state[:kleinkram] + (is_kleinkram?(issue) ? 1 : 0)
     end
+  end
 
   backlog_state
 end
-
 
 def retrieve_in_progress_infos(sprint_issues)
   dummy_state_info
@@ -225,7 +225,7 @@ SCHEDULER.every '8s', :first_in => 0 do
   if (view_json)
     sprint_meta = get_active_sprint_for_view(view_json['id'])
     if (sprint_meta)
-      sprint_issues = get_sprint_issues(view_json['id'], sprint_json['id'])
+      sprint_issues = get_sprint_issues(view_json['id'], sprint_meta['id'])
       sprint_name = sprint_meta['name']
 
       backlog = retrieve_backlog_infos sprint_issues
