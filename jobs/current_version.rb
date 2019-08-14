@@ -3,16 +3,13 @@ require 'json'
 
 class CurrentVersion
 
-  def initialize(config)
-    @config = config
+  def initialize(jira_sprint)
+    @sprint = jira_sprint
   end
 
   def retrieve_latest_version
     response = HTTParty.get(versions_info_url, {
-      :basic_auth => {
-        :username => @config['jira']['username'],
-        :password => @config['jira']['password']
-      }
+      :basic_auth => @sprint.jira_auth
     })
     body = JSON.parse(response.body)
     version = latest_released_version body
@@ -31,12 +28,11 @@ class CurrentVersion
   end
   
   def versions_info_url
-    "#{@config['jira']['endpoint']}/project/BAUEN/versions"
+    "#{@sprint.jira_url}/project/BAUEN/versions"
   end
 end
 
-config = YAML.load_file('config.yml')
-current_version = CurrentVersion.new config
+current_version = CurrentVersion.new JIRA_SPRINT
 
 SCHEDULER.every '60s', :first_in => 0 do
   

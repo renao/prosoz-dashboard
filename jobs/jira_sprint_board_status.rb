@@ -4,20 +4,6 @@ require 'net/http'
 require 'json'
 require 'time'
 
-# Loads configuration file
-config = YAML.load_file('config.yml')
-USERNAME = config['jira']['username']
-PASSWORD = config['jira']['password']
-JIRA_URI = URI.parse(config['jira']['url'])
-STORY_POINTS_CUSTOMFIELD_CODE = config['jira']['customfield']['storypoints']
-VIEW_ID = config['jira']['view']
-
-BACKLOG_STATE_ID = config['jira']['states']['backlog']
-IN_PROGRESS_STATE_ID = config['jira']['states']['in_progress']
-IN_REVIEW_STATE_ID = config['jira']['states']['in_review']
-IN_TEST_STATE_ID = config['jira']['states']['in_test']
-DONE_STATE_ID = config['jira']['states']['done']
-
 def get_view_for_viewid(view_id)
   http = create_http
   request = create_request("/rest/greenhopper/1.0/rapidviews/list")
@@ -55,8 +41,8 @@ def get_sprint_issues(view_id, sprint_id)
 end
  
 def create_http
-  http = Net::HTTP.new(JIRA_URI.host, JIRA_URI.port)
-  if ('https' == JIRA_URI.scheme)
+  http = Net::HTTP.new(JIRA_SPRINT.jira_url.host, JIRA_SPRINT.jira_url.port)
+  if ('https' == JIRA_SPRINT.jira_url.scheme)
     http.use_ssl     = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   end
@@ -64,9 +50,9 @@ def create_http
 end
 
 def create_request(path)
-  request = Net::HTTP::Get.new(JIRA_URI.path + path)
-  if USERNAME
-    request.basic_auth(USERNAME, PASSWORD)
+  request = Net::HTTP::Get.new(JIRA_SPRINT.jira_url.path + path)
+  if
+    request.basic_auth(JIRA_SPRINT.jira_auth['username'], JIRA_SPRINT.jira_auth['password'])
   end
   return request
 end
@@ -103,7 +89,7 @@ def is_state?(issue, expected_state_id)
 end
 
 def story_points(issue)
-  !issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE].nil? ? issue['fields'][STORY_POINTS_CUSTOMFIELD_CODE] : 0
+  !issue['fields'][JIRA_SPRINT.story_points_field_name].nil? ? issue['fields'][JIRA_SPRINT.story_points_field_name] : 0
 end
 
 def is_kleinkram?(issue)
@@ -135,7 +121,6 @@ def empty_state
 end
 
 SCHEDULER.every '20s', :first_in => 0 do
-
   sprint_name = ''
   sprint_info = Hash.new(0)
   backlog = Hash.new(0)
@@ -144,18 +129,18 @@ SCHEDULER.every '20s', :first_in => 0 do
   in_test = Hash.new(0)
   done = Hash.new(0)
 
-  view_json = get_view_for_viewid(VIEW_ID)
+  view_json = get_view_for_viewid(JIRA_SPRINT.view_id)
   if (view_json)
     sprint_meta = get_active_sprint_for_view(view_json['id'])
     if (sprint_meta)
       sprint_issues = get_sprint_issues(view_json['id'], sprint_meta['id'])
       sprint_name = sprint_meta['name']
 
-      backlog = retrieve_state_infos sprint_issues, BACKLOG_STATE_ID
-      in_progress = retrieve_state_infos sprint_issues, IN_PROGRESS_STATE_ID
-      in_review = retrieve_state_infos sprint_issues, IN_REVIEW_STATE_ID
-      in_test = retrieve_state_infos sprint_issues, IN_TEST_STATE_ID
-      done = retrieve_state_infos sprint_issues, DONE_STATE_ID
+      backlog = retrieve_state_infos sprint_issues, JIRA_SPRINT.backlog_state_id
+      in_progress = retrieve_state_infos sprint_issues, JIRA_SPRINT.in_progress_state_id
+      in_review = retrieve_state_infos sprint_issues, JIRA_SPRINT.in_review_state_id
+      in_test = retrieve_state_infos sprint_issues, JIRA_SPRINT.in_test_state_id
+      done = retrieve_state_infos sprint_issues, JIRA_SPRINT.done_state_id
 
       sprint_info = accumulate_sprint backlog, in_progress, in_review, in_test, done
     end
