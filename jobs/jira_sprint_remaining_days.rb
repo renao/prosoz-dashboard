@@ -1,23 +1,9 @@
-# Displays the board name, sprint name and remaining days for the active sprint for a specific board in Jira Agile
-
 require 'net/http'
 require 'json'
 require 'time'
 
-config = YAML.load_file('config.yml')
-USERNAME = config['jira']['username']
-PASSWORD = config['jira']['password']
-JIRA_URI = URI.parse(config['jira']['url'])
-VIEW_ID = config['jira']['view']
-
-JIRA_AUTH = {
-  'name' => USERNAME,
-  'password' => PASSWORD
-}
-
-# the key of this mapping must be a unique identifier for your board, the according value must be the view id that is used in Jira
 view_mapping = {
-  'view1' => { :view_id => VIEW_ID },
+  'view1' => { :view_id => JIRA_SPRINT.view_id },
 }
 
 # gets the view for a given view id
@@ -57,9 +43,9 @@ end
 
 # create HTTP
 def create_http
-  http = Net::HTTP.new(JIRA_URI.host, JIRA_URI.port)
-  if ('https' == JIRA_URI.scheme)
-    http.use_ssl     = true
+  http = Net::HTTP.new(JIRA_SPRINT.jira_url.host, JIRA_SPRINT.jira_url.port)
+  if ('https' == JIRA_SPRINT.jira_url.scheme)
+    http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   end
   return http
@@ -67,15 +53,15 @@ end
 
 # create HTTP request for given path
 def create_request(path)
-  request = Net::HTTP::Get.new(JIRA_URI.path + path)
-  if JIRA_AUTH['name']
-    request.basic_auth(JIRA_AUTH['name'], JIRA_AUTH['password'])
+  request = Net::HTTP::Get.new(JIRA_SPRINT.jira_url.path + path)
+  if JIRA_SPRINT.jira_auth['username']
+    request.basic_auth(JIRA_SPRINT.jira_auth['username'], JIRA_SPRINT.jira_auth['password'])
   end
   return request
 end
 
 view_mapping.each do |view, view_id|
-  SCHEDULER.every '60s', :first_in => 0 do |id|
+  SCHEDULER.every '20s', :first_in => 0 do |id|
     view_name = ""
     sprint_name = ""
     days = ""
@@ -88,18 +74,14 @@ view_mapping.each do |view, view_id|
         days_json = get_remaining_days(view_json['id'], sprint_json['id'])
         days = days_json['days']
 
-        if (days == 1)
-          days = "#{days} Tag"          
-        else
-          days = "#{days} Tage"
-        end
+        formatted_days = (days == 1) ? '1 Tag' : "#{days} Tage"
       end
     end
 
     send_event(view, {
       viewName: view_name,
       sprintName: sprint_name,
-      daysRemaining: days
+      daysRemaining: formatted_days
     })
   end
 end
