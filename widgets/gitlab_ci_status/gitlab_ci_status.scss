@@ -1,0 +1,38 @@
+.widget-gitlab-ci-status {
+
+    .updated_at {
+        position: absolute;
+        bottom: 1rem;
+        left: 0;
+        right: 0;
+        font-weight: unset;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, .5);
+
+        &::before {
+            content: "Stand: ";
+        }
+    }
+}
+
+.ci-status-success {
+    .ci-status-icon {
+        font-size: 10rem;
+        &:before {
+            font-family: 'Font Awesome 5 Free';
+            content: '\f5b8';
+            color: rgba(255,255,255, .8);
+        }
+    }
+}
+
+.ci-status-failed {
+    background: red !important;
+    .ci-status-icon {
+        font-size: 10rem;
+        &:before {
+            font-family: 'Font Awesome 5 Free';
+            content: '\f5b4';
+        }
+    }
+}
