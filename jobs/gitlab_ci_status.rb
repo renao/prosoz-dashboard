@@ -4,9 +4,10 @@ require 'date'
 
 class GitlabPipelineStatus
 
-  def initialize(config, project_id, branch)
+  def initialize(config, project_id, branch, project_name)
     @config = config
     @project_id = project_id
+    @project_name = project_name
     @branch = branch
     @pipelines_endpoint = "#{@config['gitlab']['api_endpoint']}/projects/#{@project_id}/pipelines"
   end
@@ -21,9 +22,10 @@ class GitlabPipelineStatus
     body = JSON.parse(response.body)
     pipeline = latest_completed_pipeline_for_branch body
     return {
+      project: @project_name,
       branch: pipeline['ref'],
       status: pipeline['status'],
-      updated_at: DateTime.now.strftime('%H:%M Uhr - %d.%m.%Y')
+      updated_at: DateTime.now.strftime('%H:%M Uhr, %d.%m.%Y')
     }
   end
 
@@ -36,8 +38,7 @@ class GitlabPipelineStatus
   end
 
   def has_relevant_status?(pipeline)
-    pipeline['status'] == 'success' || pipeline['status'] == 'failed'
-    #['success', 'failed'].include?(pipeline['status'])
+    ['success', 'failed'].include?(pipeline['status'])
   end
 
   def is_branch?(pipeline)
@@ -46,9 +47,13 @@ class GitlabPipelineStatus
 end
 
 config = YAML.load_file('config.yml')
-teambuilder_ci_status = GitlabPipelineStatus.new config, 5, "master"
+mobile_develop_ci_status = GitlabPipelineStatus.new config, 2, "develop", "Mobile Client"
+team_builder_master_ci_status = GitlabPipelineStatus.new config, 5, "master", "Team Builder"
 
 SCHEDULER.every '10s', :first_in => 0 do
-  pipeline_event = teambuilder_ci_status.retrieve_latest_pipeline_status
-  send_event('prosozbauCIStatus', pipeline_event)
+  mobile_develop_event_data = mobile_develop_ci_status.retrieve_latest_pipeline_status
+  send_event('mobileCIStatusDevelop', mobile_develop_event_data)
+  
+  team_builder_master_event_data = team_builder_master_ci_status.retrieve_latest_pipeline_status
+  send_event("teamBuilderCIStatusMaster", team_builder_master_event_data)
 end
