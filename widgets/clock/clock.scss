@@ -1,1 +1,10 @@
-.widget-clock {}
+.widget-clock {
+
+    .date {
+        font-weight: 300;
+    }
+    .time {
+        font-size: 4rem;
+        font-weight: 600;
+    }
+}

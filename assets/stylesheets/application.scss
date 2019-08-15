@@ -252,24 +252,26 @@ h3 {
 
 
 $widget-primary-font-size: 4rem;
-$widget-secondary-font-size: 1.7rem;
+$widget-secondary-font-size: unset;
 $widget-primary-font-weight: 600;
 $widget-secondary-font-weight: 300;
 
 .widget_info__primary {
+  margin: 1rem;
   font-size: $widget-primary-font-size;
   color: $text-color;
   font-weight: $widget-primary-font-weight;
 }
 
 .widget_info__secondary {
+  margin: 1rem;
   font-size: $widget-secondary-font-size;
   color: $text-color;
   font-weight: $widget-secondary-font-weight;
 }
 
 .widget_title {
-  font-size: $widget-secondary-font-size;
+  font-size: 1.8rem;
   color: $text-color;
   font-weight: $widget-secondary-font-weight;
 }

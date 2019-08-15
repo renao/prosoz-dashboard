@@ -24,15 +24,50 @@
             color: rgba(255,255,255, .8);
         }
     }
+
+    .branch {
+        position: absolute;
+        bottom: 3rem;
+        left: 0;
+        right: 0;
+        color: rgba(255,255,255, .8);
+        font-weight: 300;
+    }
+
+    .project {
+        position: absolute;
+        top: 2rem;
+        left: 0;
+        right: 0;
+        font-size: 1.8rem;
+        font-weight: 300;
+    }
 }
 
 .ci-status-failed {
     background: red !important;
+    font-size: 10rem;
     .ci-status-icon {
         font-size: 10rem;
         &:before {
             font-family: 'Font Awesome 5 Free';
             content: '\f5b4';
         }
+    }
+
+    .branch {
+        position: absolute;
+        bottom: 3rem;
+        left: 0;
+        right: 0;
+        color: rgb(255,255,255);
+    }
+
+    .project {
+        position: absolute;
+        top: 2rem;
+        left: 0;
+        right: 0;
+        font-size: 1.8rem;
     }
 }
