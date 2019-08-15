@@ -88,7 +88,7 @@ view_mapping.each do |view, view_id|
         days_json = get_remaining_days(view_json['id'], sprint_json['id'])
         days = days_json['days']
 
-        if (days <= 1)
+        if (days == 1)
           days = "#{days} Tag"          
         else
           days = "#{days} Tage"
