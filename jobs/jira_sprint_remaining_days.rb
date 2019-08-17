@@ -8,7 +8,6 @@ view_mapping = {
 
 class RemainingDays
 
-
   def initialize(jira_sprint)
     @sprint = jira_sprint
   end
@@ -86,15 +85,13 @@ end
 
 remaining_sprint_days = RemainingDays.new JIRA_SPRINT
 
-view_mapping.each do |view, view_id|
-  SCHEDULER.every '20s', :first_in => 0 do |id|
-    
-    data = remaining_sprint_days.remaining_days
+SCHEDULER.every '20s', :first_in => 0 do |id|
+  
+  data = remaining_sprint_days.remaining_days
 
-    send_event(view, {
-      viewName: view_name,
-      sprintName: sprint_name,
-      daysRemaining: formatted_days
-    })
-  end
+  send_event('view1', {
+    viewName: view_name,
+    sprintName: sprint_name,
+    daysRemaining: formatted_days
+  })
 end
