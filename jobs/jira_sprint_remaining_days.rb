@@ -1,4 +1,4 @@
-require 'net/http'
+require 'httparty'
 require 'json'
 require 'time'
 
@@ -35,9 +35,8 @@ class RemainingDays
   private
 
   def get_sprint_meta
-    http = create_http
-    request = create_request("/rest/greenhopper/1.0/rapidviews/list")
-    response = http.request(request)
+    response = HTTParty.get(sprint_meta_url, { :basic_auth => @sprint.jira_auth })
+
     views = JSON.parse(response.body)['views']
     views.each do |view|
       if view['id'] == @sprint.view_id
@@ -45,11 +44,14 @@ class RemainingDays
       end
     end
   end
+
+  def sprint_meta_url
+    "#{@sprint.jira_url}/rest/greenhopper/1.0/rapidviews/list"
+  end
   
   def get_active_sprint_for_view(view_id)
-    http = create_http
-    request = create_request("/rest/greenhopper/1.0/sprintquery/#{view_id}")
-    response = http.request(request)
+    response = HTTParty.get(sprint_query_url(view_id), { :basic_auth => @sprint.jira_auth })
+    
     sprints = JSON.parse(response.body)['sprints']
     sprints.each do |sprint|
       if sprint['state'] == 'ACTIVE'
@@ -57,30 +59,18 @@ class RemainingDays
       end
     end
   end
+
+  def sprint_query_url(view_id)
+    "#{@sprint.jira_url}/rest/greenhopper/1.0/sprintquery/#{view_id}"
+  end
   
   def get_remaining_days(view_id, sprint_id)
-  
-    http = create_http
-    request = create_request("/rest/greenhopper/1.0/gadgets/sprints/remainingdays?rapidViewId=#{view_id}&sprintId=#{sprint_id}")
-    response = http.request(request)
+    response = HTTParty.get(remaining_days_url(view_id, sprint_id), { :basic_auth => @sprint.jira_auth })
     JSON.parse(response.body)
   end
-  
-  def create_http
-    http = Net::HTTP.new(@sprint.jira_url.host, @sprint.jira_url.port)
-    if ('https' == @sprint.jira_url.scheme)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    end
-    return http
-  end
-  
-  def create_request(path)
-    request = Net::HTTP::Get.new(@sprint.jira_url.path + path)
-    if @sprint.jira_auth['username']
-      request.basic_auth(@sprint.jira_auth['username'], @sprint.jira_auth['password'])
-    end
-    return request
+
+  def remaining_days_url(view_id, sprint_id)
+    "#{@sprint.jira_url}/rest/greenhopper/1.0/gadgets/sprints/remainingdays?rapidViewId=#{view_id}&sprintId=#{sprint_id}"
   end
 end
 
