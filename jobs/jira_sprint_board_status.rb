@@ -132,7 +132,7 @@ class BoardStatus
   end
 
   def story_points(issue)
-    !issue['fields'][JIRA_SPRINT.story_points_field_name].nil? ? issue['fields'][JIRA_SPRINT.story_points_field_name] : 0
+    !issue['fields'][@sprint.story_points_field_name].nil? ? issue['fields'][@sprint.story_points_field_name] : 0
   end
 
   def is_kleinkram?(issue)
@@ -156,10 +156,10 @@ class BoardStatus
 
   def empty_state
     {
-      :tickets => 0,
-      :story_points => 0,
-      :task_force => 0,
-      :kleinkram => 0
+      tickets: 0,
+      story_points: 0,
+      task_force: 0,
+      kleinkram: 0
     }
   end
 
