@@ -63,15 +63,3 @@ class RemainingDays
     "#{@sprint.jira_url}/#{path}"
   end
 end
-
-remaining_sprint_days = RemainingDays.new JIRA_SPRINT
-
-SCHEDULER.every '20s', first_in: 0 do |id|
-  
-  remaining = remaining_sprint_days.remaining_days
-
-  send_event('view1', {
-    sprintName: remaining[:sprint_name],
-    daysRemaining: remaining[:days]
-  })
-end
