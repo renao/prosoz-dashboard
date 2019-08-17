@@ -2,10 +2,6 @@ require 'net/http'
 require 'json'
 require 'time'
 
-view_mapping = {
-  'view1' => { :view_id => JIRA_SPRINT.view_id },
-}
-
 class RemainingDays
 
   def initialize(jira_sprint)
@@ -15,7 +11,7 @@ class RemainingDays
   def remaining_days
     view_name = ""
     sprint_name = ""
-    days = ""
+    formatted_days = ""
     view_json = get_sprint_meta
     if (view_json)
       view_name = view_json['name']
@@ -28,8 +24,13 @@ class RemainingDays
         formatted_days = (days == 1) ? '1 Tag' : "#{days} Tage"
       end
     end
-  end
 
+    return {
+      view_name: view_name,
+      sprint_name: sprint_name,
+      days: formatted_days
+    }
+  end
 
   private
 
@@ -87,11 +88,11 @@ remaining_sprint_days = RemainingDays.new JIRA_SPRINT
 
 SCHEDULER.every '20s', :first_in => 0 do |id|
   
-  data = remaining_sprint_days.remaining_days
+  remaining = remaining_sprint_days.remaining_days
 
   send_event('view1', {
-    viewName: view_name,
-    sprintName: sprint_name,
-    daysRemaining: formatted_days
+    viewName: remaining[:view_name],
+    sprintName: remaining[:sprint_name],
+    daysRemaining: remaining[:formatted_days]
   })
 end
