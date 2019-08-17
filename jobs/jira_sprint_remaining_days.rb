@@ -18,7 +18,6 @@ class RemainingDays
         sprint_name = sprint_json['name']
         days_json = get_remaining_days(view_json['id'], sprint_json['id'])
         days = days_json['days']
-
         formatted_days = (days == 1) ? '1 Tag' : "#{days} Tage"
       end
     end
@@ -33,32 +32,14 @@ class RemainingDays
 
   def get_sprint_meta
     response = HTTParty.get(sprint_meta_url, { basic_auth: @sprint.jira_auth })
-
     views = JSON.parse(response.body)['views']
-    views.each do |view|
-      if view['id'] == @sprint.view_id
-        return view
-      end
-    end
-  end
-
-  def sprint_meta_url
-    "#{@sprint.jira_url}/rest/greenhopper/1.0/rapidviews/list"
+    views.find { |view| view['id'] == @sprint.view_id}
   end
   
   def get_active_sprint_for_view(view_id)
     response = HTTParty.get(sprint_query_url(view_id), { basic_auth: @sprint.jira_auth })
-    
     sprints = JSON.parse(response.body)['sprints']
-    sprints.each do |sprint|
-      if sprint['state'] == 'ACTIVE'
-        return sprint
-      end
-    end
-  end
-
-  def sprint_query_url(view_id)
-    "#{@sprint.jira_url}/rest/greenhopper/1.0/sprintquery/#{view_id}"
+    sprints.find { |sprint| sprint['state'] == 'ACTIVE'}
   end
   
   def get_remaining_days(view_id, sprint_id)
@@ -66,8 +47,20 @@ class RemainingDays
     JSON.parse(response.body)
   end
 
+  def sprint_meta_url
+    jira_resource "/rest/greenhopper/1.0/rapidviews/list"
+  end
+
+  def sprint_query_url(view_id)
+    jira_resource "/rest/greenhopper/1.0/sprintquery/#{view_id}"
+  end
+
   def remaining_days_url(view_id, sprint_id)
-    "#{@sprint.jira_url}/rest/greenhopper/1.0/gadgets/sprints/remainingdays?rapidViewId=#{view_id}&sprintId=#{sprint_id}"
+    jira_resource "/rest/greenhopper/1.0/gadgets/sprints/remainingdays?rapidViewId=#{view_id}&sprintId=#{sprint_id}"
+  end
+
+  def jira_resource(path)
+    "#{@sprint.jira_url}/#{path}"
   end
 end
 
@@ -79,6 +72,6 @@ SCHEDULER.every '20s', first_in: 0 do |id|
 
   send_event('view1', {
     sprintName: remaining[:sprint_name],
-    daysRemaining: remaining[:formatted_days]
+    daysRemaining: remaining[:days]
   })
 end
