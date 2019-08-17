@@ -32,7 +32,7 @@ class RemainingDays
   private
 
   def get_sprint_meta
-    response = HTTParty.get(sprint_meta_url, { :basic_auth => @sprint.jira_auth })
+    response = HTTParty.get(sprint_meta_url, { basic_auth: @sprint.jira_auth })
 
     views = JSON.parse(response.body)['views']
     views.each do |view|
@@ -47,7 +47,7 @@ class RemainingDays
   end
   
   def get_active_sprint_for_view(view_id)
-    response = HTTParty.get(sprint_query_url(view_id), { :basic_auth => @sprint.jira_auth })
+    response = HTTParty.get(sprint_query_url(view_id), { basic_auth: @sprint.jira_auth })
     
     sprints = JSON.parse(response.body)['sprints']
     sprints.each do |sprint|
@@ -62,7 +62,7 @@ class RemainingDays
   end
   
   def get_remaining_days(view_id, sprint_id)
-    response = HTTParty.get(remaining_days_url(view_id, sprint_id), { :basic_auth => @sprint.jira_auth })
+    response = HTTParty.get(remaining_days_url(view_id, sprint_id), { basic_auth: @sprint.jira_auth })
     JSON.parse(response.body)
   end
 
@@ -73,7 +73,7 @@ end
 
 remaining_sprint_days = RemainingDays.new JIRA_SPRINT
 
-SCHEDULER.every '20s', :first_in => 0 do |id|
+SCHEDULER.every '20s', first_in: 0 do |id|
   
   remaining = remaining_sprint_days.remaining_days
 
