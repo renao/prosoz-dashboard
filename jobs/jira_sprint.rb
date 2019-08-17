@@ -31,8 +31,7 @@ JIRA_SPRINT = JiraSprint.new config
 current_version = CurrentVersion.new JIRA_SPRINT
 remaining_sprint_days = RemainingDays.new JIRA_SPRINT
 
-SCHEDULER.every '20s', first_in: 0 do |id|
-  
+SCHEDULER.every '30s', first_in: 0 do
   version_event = current_version.retrieve_latest_version
   send_event('currentVersion', version_event)
 
