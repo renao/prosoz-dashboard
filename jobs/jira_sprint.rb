@@ -1,5 +1,7 @@
 require 'net/http'
 require 'json'
+require_relative '_jira__current_version'
+require_relative '_jira__remaining_days'
 
 class JiraSprint
 
@@ -25,3 +27,19 @@ end
 
 config = YAML.load_file('config.yml')
 JIRA_SPRINT = JiraSprint.new config
+
+current_version = CurrentVersion.new JIRA_SPRINT
+remaining_sprint_days = RemainingDays.new JIRA_SPRINT
+
+SCHEDULER.every '20s', first_in: 0 do |id|
+  
+  version_event = current_version.retrieve_latest_version
+  send_event('currentVersion', version_event)
+
+  remaining = remaining_sprint_days.remaining_days
+
+  send_event('view1', {
+    sprintName: remaining[:sprint_name],
+    daysRemaining: remaining[:days]
+  })
+end

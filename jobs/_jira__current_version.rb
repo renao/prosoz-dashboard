@@ -31,11 +31,3 @@ class CurrentVersion
     "#{@sprint.jira_url}/project/BAUEN/versions"
   end
 end
-
-current_version = CurrentVersion.new JIRA_SPRINT
-
-SCHEDULER.every '60s', :first_in => 0 do
-  
-  version_event = current_version.retrieve_latest_version
-  send_event('currentVersion', version_event)
-end
