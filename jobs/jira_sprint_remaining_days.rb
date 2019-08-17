@@ -9,12 +9,10 @@ class RemainingDays
   end
 
   def remaining_days
-    view_name = ""
     sprint_name = ""
     formatted_days = ""
     view_json = get_sprint_meta
     if (view_json)
-      view_name = view_json['name']
       sprint_json = get_active_sprint_for_view(view_json['id'])
       if (sprint_json)
         sprint_name = sprint_json['name']
@@ -26,7 +24,6 @@ class RemainingDays
     end
 
     return {
-      view_name: view_name,
       sprint_name: sprint_name,
       days: formatted_days
     }
@@ -81,7 +78,6 @@ SCHEDULER.every '20s', :first_in => 0 do |id|
   remaining = remaining_sprint_days.remaining_days
 
   send_event('view1', {
-    viewName: remaining[:view_name],
     sprintName: remaining[:sprint_name],
     daysRemaining: remaining[:formatted_days]
   })
