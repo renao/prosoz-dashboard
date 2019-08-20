@@ -1,10 +1,8 @@
-require 'net/http'
-require 'json'
 require_relative '_jira__current_version'
 require_relative '_jira__remaining_days'
 require_relative '_jira__sprint'
 
-config = YAML.load_file('config.yml')
+config = YAML.load_file 'config.yml'
 rich_client_sprint = JiraSprint.new config
 
 current_version = CurrentVersion.new rich_client_sprint
@@ -32,7 +30,7 @@ SCHEDULER.every '30s', first_in: 0 do
   done = state[:done]
 
   send_event('boardStatus', {
-      sprintName: sprint_name,
+      sprintName: state[:sprint_name],
       sprintTickets: sprint_info[:tickets],
       sprintSP: sprint_info[:story_points],
       sprintTaskForce: sprint_info[:task_force],
