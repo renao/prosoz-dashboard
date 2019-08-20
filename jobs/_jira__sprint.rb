@@ -12,13 +12,17 @@ class JiraSprint
     @view_id = @config['jira']['view']
     @story_points_field_name = @config['jira']['customfield']['storypoints']
     @jira_auth = {
-      'name' => @config['jira']['username'],
-      'password' => @config['jira']['password']
+      username: @config['jira']['username'],
+      password: @config['jira']['password']
     }
     @backlog_state_id = @config['jira']['states']['backlog']
     @in_progress_state_id = @config['jira']['states']['in_progress']
     @in_review_state_id = @config['jira']['states']['in_review']
     @in_test_state_id = @config['jira']['states']['in_test']
     @done_state_id = @config['jira']['states']['in_progress']
+  end
+
+  def jira_resource(path)
+    @jira_url + path
   end
 end
