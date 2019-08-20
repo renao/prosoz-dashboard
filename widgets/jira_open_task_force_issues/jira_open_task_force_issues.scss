@@ -1,0 +1,73 @@
+.task-force-issues {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
+    height: 95%;
+    justify-items: stretch;
+
+    .widget_title {
+        margin: 1rem;
+    }
+}
+
+.issue-list {
+    width: 100%;
+}
+
+.task-force-ticket {
+    background: rgba(255,255,255,.15);
+    margin-left: .4rem;
+    margin-right: .4rem;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+
+
+    .issue-type {
+        width: 10%;
+        align-self: center;
+        margin-left: .4rem;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    .issue-data {
+        padding: .6rem;
+        .issue-meta {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            font-size: .8rem;
+            font-family: 'Open Sans';
+            font-weight: 300;
+
+            .issue-date {
+                &::before {
+                    padding: .2rem;
+                    content: "|";
+                }
+            }
+        }
+        .issue-summary {
+            padding-top: .1rem;
+            padding-bottom: .1rem;
+            text-align: left;
+            font-size: 1rem;
+        }
+    }
+}
+.no-task-force {
+    margin: 2rem;
+
+    .no-open-task-force-hint {
+        font-size: 1rem;
+    }
+    
+    .no-open-task-force-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+}
