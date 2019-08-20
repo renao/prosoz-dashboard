@@ -12,8 +12,3 @@ jira:
     done: "10001"
   customfield:
     storypoints: customfield_10107
-
-confluence:
-  username: confluence_user
-  password: confluence_user_password
-  endpoint: http://confluence.uri/rest/api
