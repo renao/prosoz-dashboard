@@ -1,5 +1,5 @@
-require 'net/http'
 require 'json'
+require 'httparty'
 
 class BoardStatus
 
@@ -34,6 +34,7 @@ class BoardStatus
     end
 
     return {
+      sprint_name: sprint_name,
       sprint: sprint_info,
       backlog: backlog,
       in_progress: in_progress,
@@ -46,10 +47,12 @@ class BoardStatus
 
   private
 
+  def get_response_for(resource)
+    HTTParty.get(resource, basic_auth: @sprint.jira_auth)
+  end
+
   def get_view_for_viewid(view_id)
-    http = create_http
-    request = create_request("/rest/greenhopper/1.0/rapidviews/list")
-    response = http.request(request)
+    response = get_response_for(views_url)
     views = JSON.parse(response.body)['views']
     views.each do |view|
       if view['id'] == view_id
@@ -58,10 +61,12 @@ class BoardStatus
     end
   end
 
+  def views_url
+    @sprint.jira_resource "rest/greenhopper/1.0/rapidviews/list"
+  end
+
   def get_active_sprint_for_view(view_id)
-    http = create_http
-    request = create_request("/rest/greenhopper/1.0/sprintquery/#{view_id}")
-    response = http.request(request)
+    response = get_response_for(sprint_query_url(view_id))
     sprints = JSON.parse(response.body)['sprints']
     sprints.each do |sprint|
       if sprint['state'] == 'ACTIVE'
@@ -70,41 +75,24 @@ class BoardStatus
     end
   end
 
+  def sprint_query_url(view_id)
+    @sprint.jira_resource "rest/greenhopper/1.0/sprintquery/#{view_id}"
+  end
+
   def get_sprint_issues(view_id, sprint_id)
     offset = 0
     issues = Array.new(0)
     begin
-      response = get_response("/rest/agile/1.0/board/#{view_id}/sprint/#{sprint_id}/issue?startAt=#{offset}")
+      response = get_response_for(sprint_issues_url(view_id, sprint_id, offset))
       page_result = JSON.parse(response.body)
       issues.concat page_result['issues']
       offset = offset + page_result['maxResults']
     end while offset < page_result['total']
     issues
   end
-  
-  def create_http
-    http = Net::HTTP.new(@sprint.jira_url.host, @sprint.jira_url.port)
-    if ('https' == @sprint.jira_url.scheme)
-      http.use_ssl     = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    end
-    return http
-  end
 
-  def create_request(path)
-    request = Net::HTTP::Get.new(@sprint.jira_url.path + path)
-    if
-      request.basic_auth(@sprint.jira_auth['username'], @sprint.jira_auth['password'])
-    end
-    return request
-  end
-
-  def get_response(path)
-    http = create_http
-    request = create_request(path)
-    response = http.request(request)
-
-    return response
+  def sprint_issues_url(view_id, sprint_id, offset)
+    @sprint.jira_resource "rest/agile/1.0/board/#{view_id}/sprint/#{sprint_id}/issue?startAt=#{offset}"
   end
 
   def retrieve_state_infos(sprint_issues, state_id)
