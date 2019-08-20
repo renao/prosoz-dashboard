@@ -30,36 +30,36 @@ class RemainingDays
 
   private
 
+  def get_response_for(resource)
+    HTTParty.get(resource, basic_auth: @sprint.jira_auth)
+  end
+
   def get_sprint_meta
-    response = HTTParty.get(sprint_meta_url, { basic_auth: @sprint.jira_auth })
+    response = get_response_for(sprint_meta_url)
     views = JSON.parse(response.body)['views']
     views.find { |view| view['id'] == @sprint.view_id}
   end
   
   def get_active_sprint_for_view(view_id)
-    response = HTTParty.get(sprint_query_url(view_id), { basic_auth: @sprint.jira_auth })
+    response = get_response_for(sprint_query_url(view_id))
     sprints = JSON.parse(response.body)['sprints']
     sprints.find { |sprint| sprint['state'] == 'ACTIVE'}
   end
   
   def get_remaining_days(view_id, sprint_id)
-    response = HTTParty.get(remaining_days_url(view_id, sprint_id), { basic_auth: @sprint.jira_auth })
+    response = get_response_for(remaining_days_url(view_id, sprint_id))
     JSON.parse(response.body)
   end
 
   def sprint_meta_url
-    jira_resource "/rest/greenhopper/1.0/rapidviews/list"
+    @sprint.jira_resource "rest/greenhopper/1.0/rapidviews/list"
   end
 
   def sprint_query_url(view_id)
-    jira_resource "/rest/greenhopper/1.0/sprintquery/#{view_id}"
+    @sprint.jira_resource "rest/greenhopper/1.0/sprintquery/#{view_id}"
   end
 
   def remaining_days_url(view_id, sprint_id)
-    jira_resource "/rest/greenhopper/1.0/gadgets/sprints/remainingdays?rapidViewId=#{view_id}&sprintId=#{sprint_id}"
-  end
-
-  def jira_resource(path)
-    "#{@sprint.jira_url}/#{path}"
+    @sprint.jira_resource "rest/greenhopper/1.0/gadgets/sprints/remainingdays?rapidViewId=#{view_id}&sprintId=#{sprint_id}"
   end
 end
