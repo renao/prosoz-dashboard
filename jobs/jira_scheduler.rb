@@ -1,6 +1,7 @@
 require_relative '_jira__current_version'
 require_relative '_jira__remaining_days'
 require_relative '_jira__sprint'
+require_relative '_jira__open_task_force_issues'
 
 config = YAML.load_file 'config.yml'
 rich_client_sprint = JiraSprint.new config
@@ -8,8 +9,12 @@ rich_client_sprint = JiraSprint.new config
 current_version = CurrentVersion.new rich_client_sprint
 remaining_sprint_days = RemainingDays.new rich_client_sprint
 board_status = BoardStatus.new rich_client_sprint
+sprint_issues = SprintIssues.new rich_client_sprint
+task_force_tickets = OpenTaskForceIssues.new
 
 SCHEDULER.every '30s', first_in: 0 do
+  issues = sprint_issues.retrieve_issues
+
   version_event = current_version.retrieve_latest_version
   send_event('currentVersion', version_event)
 
@@ -20,7 +25,14 @@ SCHEDULER.every '30s', first_in: 0 do
     daysRemaining: remaining[:days]
   })
 
-  state = board_status.retrieve_sprint_status
+  unassigned_task_force_tickets = task_force_tickets.filter_from issues
+
+  send_event('openTaskForceIssues', {
+    issues: unassigned_task_force_tickets,
+    hasNoIssues: unassigned_task_force_tickets.empty?
+  })
+
+  state = board_status.sprint_infos_from(issues)
 
   sprint_info = state[:sprint]
   backlog = state[:backlog]
@@ -30,7 +42,7 @@ SCHEDULER.every '30s', first_in: 0 do
   done = state[:done]
 
   send_event('boardStatus', {
-      sprintName: state[:sprint_name],
+      sprintName: remaining[:sprint_name],
       sprintTickets: sprint_info[:tickets],
       sprintSP: sprint_info[:story_points],
       sprintTaskForce: sprint_info[:task_force],

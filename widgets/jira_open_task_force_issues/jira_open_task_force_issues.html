@@ -1,0 +1,30 @@
+<div class="task-force-issues">
+    <div class="widget_title">Offene Task Force Tickets</div>
+    <ul data-foreach-item="issues" class="issue-list">
+        <li>
+            <div class="task-force-ticket">
+                <div class="issue-type">
+                    <img data-bind-src="item.fields.issuetype.iconUrl" />
+                </div>
+                <div class="issue-data">
+                    <div class="issue-meta">
+                        <div data-bind="item.key" class="issue-id">...</div>
+                        <div data-bind="item.formatted_date" class="issue-date">...</div>
+                    </div>
+                    <div data-bind="item.fields.summary" class="issue-summary">...</div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div data-showif="hasNoIssues">
+        <div class="no-task-force">
+            <div class="no-open-task-force-icon">
+                <i class="fas fa-fire-extinguisher"></i>
+            </div>
+            <div class="no-open-task-force-hint">
+                Keine offenen Task Force Tickets vorhanden.
+            </div>
+        </div>
+    </div>
+</div>
+
