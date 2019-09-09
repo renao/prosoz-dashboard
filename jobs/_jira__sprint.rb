@@ -19,7 +19,7 @@ class JiraSprint
     @in_progress_state_id = @config['jira']['states']['in_progress']
     @in_review_state_id = @config['jira']['states']['in_review']
     @in_test_state_id = @config['jira']['states']['in_test']
-    @done_state_id = @config['jira']['states']['in_progress']
+    @done_state_id = @config['jira']['states']['done']
   end
 
   def jira_resource(path)
