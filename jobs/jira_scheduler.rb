@@ -29,7 +29,8 @@ SCHEDULER.every '30s', first_in: 0 do
 
   send_event('openTaskForceIssues', {
     issues: unassigned_task_force_tickets,
-    hasNoIssues: unassigned_task_force_tickets.empty?
+    hasNoIssues: unassigned_task_force_tickets.empty?,
+    updated_at: DateTime.now.strftime('%H:%M Uhr, %d.%m.%Y')
   })
 
   state = board_status.sprint_infos_from(issues)
