@@ -71,3 +71,17 @@
         margin-bottom: 1rem;
     }
 }
+
+.updated_at {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    font-weight: unset;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, .5);
+
+    &::before {
+        content: "Stand: ";
+    }
+}
