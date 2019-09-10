@@ -1,0 +1,26 @@
+<div class="open-merge-requests">
+  <div class="widget_title">Offene Merge Requests</div>
+  <ul class="merge-request-list">
+    <li data-foreach-item="mergerequests" class="merge-request">
+        <div class="merge-request-user">
+            <img data-bind-src="item.assignee.avatar_url" class="merge-request-image" />
+        </div>
+        <div class="merge-request-data">
+            <div class="merge-request-meta">
+                <div data-bind="item.title" class="merge-request-summary">...</div>
+            </div>
+        </div>
+    </li>
+  </ul>
+  <div data-showif="hasNoIssues">
+        <div class="no-merge-requests">
+            <div class="no-open-merge-requests-icon">
+                <i class="fas fa-cat"></i>
+            </div>
+            <div class="no-open-merge-requests-hint">
+                Keine offenen Merge Requests vorhanden.
+            </div>
+        </div>
+    </div>
+</div>
+<div data-bind="updated_at" class="updated_at">...</div>
