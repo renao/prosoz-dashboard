@@ -10,33 +10,42 @@ $(function() {
 
 <div class="gridster">
   <ul>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="currentVersion" data-view="CurrentVersion"></div>
+    </li>
+
+    <li data-row="1" data-col="2" data-sizex="1" data-sizey="2">
+      <div data-id="openMergeRequestsProsozBau" data-view="GitlabCiOpenMergerequests"></div>
+    </li>
+
     <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
       <div data-id="UpdateCurrentServerTime" data-view="Clock"></div>
-    </li>
-    <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
-      <div data-id="richClientCIStatusMaster" data-view="GitlabCIStatus"></div>
-    </li>
-    <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
-      <div data-id="richClientCIStatusDevelop" data-view="GitlabCIStatus"></div>
+    </li>    
+
+    <li data-row="1" data-col="3" data-sizex="1" data-sizey="2">
+      <div data-id="openTaskForceIssues" data-view="JiraOpenTaskForceIssues"></div>
     </li>
 
     <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="richClientCIStatusMaster" data-view="GitlabCIStatus"></div>
+    </li>
+
+    <li data-row="3" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="richClientCIStatusDevelop" data-view="GitlabCIStatus"></div>
+    </li>
+
+    <li data-row="2" data-col="4" data-sizex="1" data-sizey="1">
       <div data-id="view1" data-view="JiraSprintRemainingDays"></div>
     </li>
 
-    <li data-row="2" data-col="2" data-sizex="2" data-sizey="1">
-    <div data-id="boardStatus" data-view="JiraSprintBoardStatus"></div>
-  </li>
-  <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-    <div data-id="currentVersion" data-view="CurrentVersion"></div>
-  </li>
-  <li data-row="1" data-col="1" data-sizex="1" data-sizey="2">
-    <div data-id="openTaskForceIssues" data-view="JiraOpenTaskForceIssues"></div>
-  </li>
-  <li data-row="2" data-col="4" data-sizex="1" data-sizey="1">
-    <div class="widget static-prosoz-logo" data-id="prosozLogo" data-view="prosozLogo">
-      <img src="PROSOZ_Herten_Logo.svg" />
-    </div>
-  </li>
+    <li data-row="3" data-col="2" data-sizex="2" data-sizey="1">
+      <div data-id="boardStatus" data-view="JiraSprintBoardStatus"></div>
+    </li>
+
+    <li data-row="3" data-col="4" data-sizex="1" data-sizey="1">
+      <div class="widget static-prosoz-logo" data-id="prosozLogo" data-view="prosozLogo">
+        <img src="PROSOZ_Herten_Logo.svg" />
+      </div>
+    </li>
   </ul>
 </div>
