@@ -1,0 +1,90 @@
+$background-color: rgba(167, 212, 236, 0.4);
+$updated-at-color: rgba(255, 255, 255, .5);;
+
+.widget-gitlab-ci-open-mergerequests {
+    .open-merge-requests {        
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 95%;
+        justify-items: stretch;
+    
+        .widget_title {
+            margin: 1rem;
+            }
+
+        .merge-request {
+            background: rgba($color: white, $alpha: 0.2);
+            margin-left: .4rem;
+            margin-right: .4rem;
+            margin-top: .5rem;
+            display: flex;
+            align-items: flex-start;
+            flex-direction: row;
+            justify-items: center;
+    
+            .merge-request-user {
+                flex-shrink: 0;
+                width: 3rem;
+                height: 100%;
+            }
+    
+            .merge-request-data {
+                padding-left: .5rem;
+                flex-shrink: 1;
+    
+                .merge-request-meta {
+                    overflow: hidden;
+                    height: 3rem;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    font-size: .8rem;
+                    font-family: 'Open Sans';
+                    font-weight: 300;
+    
+                    .merge-request-date {
+                        &::before {
+                            padding: .2rem;
+                            content: "|";
+                        }
+                    }
+                }
+    
+                .merge-request-summary {
+                    padding-top: .1rem;
+                    padding-bottom: .1rem;
+                    text-align: left;
+                    font-size: 1rem;
+                }
+            }
+        }
+
+        .no-merge-requests {
+            margin: 2rem;
+                
+            .no-open-merge-requests-icon {
+                font-size: 4rem;
+                margin-bottom: 1rem;
+            }
+
+            .no-open-merge-requests-hint {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .updated_at {
+        position: absolute;
+        bottom: 1rem;
+        left: 0;
+        right: 0;
+        font-weight: unset;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, .5);
+
+        &::before {
+            content: "Stand: ";
+        }
+    }
+}
