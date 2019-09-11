@@ -17,20 +17,21 @@ $updated-at-color: rgba(255, 255, 255, .5);;
             background: rgba($color: white, $alpha: 0.2);
             margin-left: .4rem;
             margin-right: .4rem;
-            margin-top: .5rem;
             display: flex;
             align-items: flex-start;
             flex-direction: row;
             justify-items: center;
     
             .merge-request-user {
+                margin-left: .5rem;
+                padding-top: .5rem;
                 flex-shrink: 0;
                 width: 3rem;
                 height: 100%;
             }
     
             .merge-request-data {
-                padding-left: .5rem;
+                padding: .6rem;
                 flex-shrink: 1;
     
                 .merge-request-meta {
@@ -39,9 +40,6 @@ $updated-at-color: rgba(255, 255, 255, .5);;
                     display: flex;
                     flex-direction: row;
                     align-items: flex-start;
-                    font-size: .8rem;
-                    font-family: 'Open Sans';
-                    font-weight: 300;
     
                     .merge-request-date {
                         &::before {
