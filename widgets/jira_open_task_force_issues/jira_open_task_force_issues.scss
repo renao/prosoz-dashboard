@@ -25,9 +25,10 @@
 
 
     .issue-type {
-        width: 10%;
-        align-self: center;
+        width: 2rem;
         margin-left: .4rem;
+        padding-top: 2.1rem;
+        flex-shrink: 0;
         img {
             width: 100%;
             height: auto;
