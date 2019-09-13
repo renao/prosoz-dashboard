@@ -19,11 +19,25 @@ class GitlabOpenMergeRequests
 
     mergerequestlist = JSON.parse(response.body)
 
+    redirect_resources(mergerequestlist)
+
     return {
       mergerequests: mergerequestlist,
       hasNoIssues: mergerequestlist.empty?,
       updated_at: DateTime.now.strftime('%H:%M Uhr, %d.%m.%Y')
     }
+  end
+
+  private
+
+  def redirect_resources(merge_requests_list)
+    if @config['gitlab']['redirect_resources'] == true
+
+    merge_requests_list.each do |request|
+      request['assignee']['avatar_url'].gsub!(@config['gitlab']['redirect']['from'], @config['gitlab']['redirect']['to']) if (request.key?('assignee') && request['assignee'].key?('avatar_url'))
+
+    end
+    end
   end
 end
 
