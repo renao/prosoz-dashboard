@@ -1,7 +1,7 @@
 class OpenTaskForceIssues
 
-  def filter_from(sprint_issues)
-    tf_issues = sprint_issues.select { |issue| is_taskforce?(issue) && is_unassigned?(issue) }
+  def filter_from(sprint_issues, backlog_status_id)
+    tf_issues = sprint_issues.select { |issue| is_taskforce?(issue) && is_unassigned?(issue) && is_in_backlog?(issue, backlog_status_id) }
     prepare! tf_issues
     tf_issues
   end
@@ -27,5 +27,9 @@ class OpenTaskForceIssues
 
   def is_unassigned?(issue)
     issue['fields']['assignee'] == nil
+  end
+
+  def is_in_backlog?(issue, backlog_status_id)
+    issue['fields']['status']['id'] == backlog_status_id
   end
 end
