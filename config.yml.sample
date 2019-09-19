@@ -5,17 +5,21 @@ jira:
   endpoint: http://jira_url:port/rest/api/2
   view: 2
   states:
-    backlog: "13"
+    backlog: "10103"
     in_progress: "3"
     in_review: "10203"
     in_test: "10105"
     done: "10001"
   customfield:
     storypoints: customfield_10107
+confluence:
+  username: service_user_account
+  password: service_user_password
+  endpoint: http://confluence_url:port/rest/api
 gitlab:
-  access_token: gitlab_access_token
-  api_endpoint: http://gitlab_url/api/v4
+  access_token: service_token
+  api_endpoint: http://gitlab_url:port/api/v4
   redirect_resources: false
   redirect:
-    from: http://gitlab.website.com/
+    from: http://gitlab_url.com/
     to: http://127.0.0.1/
