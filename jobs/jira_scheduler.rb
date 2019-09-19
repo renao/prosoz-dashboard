@@ -25,7 +25,7 @@ SCHEDULER.every '30s', first_in: 0 do
     daysRemaining: remaining[:days]
   })
 
-  unassigned_task_force_tickets = task_force_tickets.filter_from issues
+  unassigned_task_force_tickets = task_force_tickets.filter_from issues, config['jira']['states']['backlog']
 
   send_event('openTaskForceIssues', {
     issues: unassigned_task_force_tickets,
