@@ -17,7 +17,7 @@ Das Dashboard wird an die Bedürfnisse des Development Teams angepasst und erwei
 
 ## Initiatoren
 
-Das Development Team des Geschäftsfeld Bauen und Umwelt, vertreten durch Fabian Wessel und René Wernicke.
+Das Development Team des Geschäftsfeld Bauen und Umwelt, vertreten durch [Fabian Wessel](https://github.com/forbon) und [René Wernicke](https://github.com/renao).
 
 ## Weiterführende Infos
 
