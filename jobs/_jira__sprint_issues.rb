@@ -17,7 +17,6 @@ class SprintIssues
         sprint_issues = get_sprint_issues(view_json['id'], sprint_meta['id'])
       end
     end
-    
     sprint_issues
   end
 
