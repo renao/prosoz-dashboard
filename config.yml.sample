@@ -3,7 +3,6 @@ jira:
   password: service_account_password
   url: http://jira_url:port
   endpoint: http://jira_url:port/rest/api/2
-  view: 2
   sprint_board_ids: #RapidBoard ID (URL)
   - 1
   - 5
