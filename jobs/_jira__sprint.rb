@@ -6,10 +6,10 @@ class JiraSprint
   attr_reader :jira_url, :jira_auth, :view_id, :story_points_field_name
   attr_reader :backlog_state_id, :in_progress_state_id, :in_review_state_id
   attr_reader :in_test_state_id, :done_state_id
-  def initialize(config)
+  def initialize(config, sprint_view_id)
     @config = config
     @jira_url = URI.parse(@config['jira']['url'])
-    @view_id = @config['jira']['view']
+    @view_id = sprint_view_id
     @story_points_field_name = @config['jira']['customfield']['storypoints']
     @jira_auth = {
       username: @config['jira']['username'],
