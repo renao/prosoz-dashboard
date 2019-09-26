@@ -34,8 +34,7 @@ class GitlabOpenMergeRequests
     if @config['gitlab']['redirect_resources'] == true
 
     merge_requests_list.each do |request|
-      request['assignee']['avatar_url'].gsub!(@config['gitlab']['redirect']['from'], @config['gitlab']['redirect']['to']) if (request.key?('assignee') && request['assignee'].key?('avatar_url'))
-
+        request['assignee']['avatar_url'].gsub!(@config['gitlab']['redirect']['from'], @config['gitlab']['redirect']['to']) if (request.key?('assignee') && !request['assignee'].nil? && request['assignee'].key?('avatar_url'))
     end
     end
   end
