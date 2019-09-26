@@ -6,9 +6,9 @@ require_relative '_jira__open_task_force_issues'
 config = YAML.load_file 'config.yml'
 
 all_sprints = config['jira']['sprint_board_ids'].map { |sprint_view_id| JiraSprint.new config, sprint_view_id }
-all_board_status = all_sprints.map { |sprint| BoardStatus.new sprint }
 all_sprint_issues = all_sprints.map { |sprint| SprintIssues.new sprint }
 
+board_status = BoardStatus.new all_sprints.first
 current_version = CurrentVersion.new all_sprints.first
 remaining_sprint_days = RemainingDays.new all_sprints.first
 task_force_tickets = OpenTaskForceIssues.new
@@ -16,6 +16,7 @@ task_force_tickets = OpenTaskForceIssues.new
 def sum_sprint_issues(sprint_issues)
   issues = Array.new(0)
   sprint_issues.each { |sprint| issues.concat sprint.retrieve_issues }
+  issues.flatten
 end
 
 SCHEDULER.every '30s', first_in: 0 do
