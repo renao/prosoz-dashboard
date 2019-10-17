@@ -2,7 +2,7 @@ require_relative '_jira__current_version'
 require_relative '_jira__remaining_days'
 require_relative '_jira__sprint'
 require_relative '_jira__open_task_force_issues'
-require_relative '__jira_sprint_issues'
+require_relative '_jira__sprint_issues'
 
 config = YAML.load_file 'config.yml'
 
