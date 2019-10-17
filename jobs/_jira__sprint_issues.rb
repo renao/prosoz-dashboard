@@ -12,9 +12,9 @@ class SprintIssues
 
     view_json = get_view_for_viewid(@sprint.view_id)
     if (view_json)
-      sprint_meta = get_active_sprint_for_view(view_json['id'])
-      if (sprint_meta)
-        sprint_issues = get_sprint_issues(view_json['id'], sprint_meta['id'])
+      sprint_ids = get_active_sprints_for_view(view_json['id'])
+      if (sprint_ids)
+        sprint_issues = get_sprint_issues(view_json['id'], sprint_ids)
       end
     end
     sprint_issues
@@ -40,29 +40,33 @@ class SprintIssues
     @sprint.jira_resource "rest/greenhopper/1.0/rapidviews/list"
   end
 
-  def get_active_sprint_for_view(view_id)
+  def get_active_sprints_for_view(view_id)
+    activeSprintIds = []
     response = get_response_for(sprint_query_url(view_id))
     sprints = JSON.parse(response.body)['sprints']
     sprints.each do |sprint|
       if sprint['state'] == 'ACTIVE'
-        return sprint
+        activeSprintIds << sprint['id']
       end
     end
+    return activeSprintIds
   end
 
   def sprint_query_url(view_id)
     @sprint.jira_resource "rest/greenhopper/1.0/sprintquery/#{view_id}"
   end
 
-  def get_sprint_issues(view_id, sprint_id)
-    offset = 0
+  def get_sprint_issues(view_id, sprint_ids)
     issues = Array.new(0)
-    begin
-      response = get_response_for(sprint_issues_url(view_id, sprint_id, offset))
-      page_result = JSON.parse(response.body)
-      issues.concat page_result['issues']
-      offset = offset + page_result['maxResults']
-    end while offset < page_result['total']
+    sprint_ids.each do |sprint|
+      offset = 0
+      begin
+        response = get_response_for(sprint_issues_url(view_id, sprint, offset))
+        page_result = JSON.parse(response.body)
+        issues.concat page_result['issues']
+        offset = offset + page_result['maxResults']
+      end while offset < page_result['total']
+    end
     issues
   end
 
