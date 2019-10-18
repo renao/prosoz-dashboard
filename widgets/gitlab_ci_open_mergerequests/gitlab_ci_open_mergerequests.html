@@ -2,9 +2,16 @@
   <div class="widget_title">Offene Merge Requests</div>
   <ul class="merge-request-list">
     <li data-foreach-item="mergerequests" class="merge-request">
-        <div class="merge-request-user">
+        <div class="merge-request-user" data-showif="item.assignee">
             <img data-bind-src="item.assignee.avatar_url" class="merge-request-image" />
         </div>
+
+        <div class="merge-request-user" data-hideif="item.assignee">
+            <div class="merge-request-user-empty">
+                <i class="fas fa-user-slash"></i>
+            </div>
+        </div>
+
         <div class="merge-request-data">
             <div class="merge-request-meta">
                 <div data-bind="item.title" class="merge-request-summary">...</div>
