@@ -35,8 +35,7 @@ class BoardStatus
       if is_state?(issue, state_id) && !is_subtask?(issue)
         state[:tickets] = state[:tickets] + 1
         state[:story_points] = state[:story_points] + story_points(issue)
-        state[:task_force] = state[:task_force] + (is_taskforce?(issue) ? 1 : 0)
-        state[:kleikram] = state[:kleinkram] + (is_kleinkram?(issue) ? 1 : 0)
+        state[:task_force] = state[:task_force] + (is_taskforce?(issue) ? 1 : 0)  
       end
     end
 
@@ -55,10 +54,6 @@ class BoardStatus
     !issue['fields'][@sprint.story_points_field_name].nil? ? issue['fields'][@sprint.story_points_field_name] : 0
   end
 
-  def is_kleinkram?(issue)
-    issue['fields']['labels'].include?('Kleinkram')
-  end
-
   def is_taskforce?(issue)
     issue['fields']['labels'].include?('TaskForce')
   end
@@ -69,7 +64,6 @@ class BoardStatus
       sum[:tickets] = sum[:tickets] + state[:tickets]
       sum[:story_points] = sum[:story_points] + state[:story_points]
       sum[:task_force] = sum[:task_force] + state[:task_force]
-      sum[:kleinkram] = sum[:kleinkram] + state[:kleinkram]
     end
     sum
   end
@@ -78,8 +72,7 @@ class BoardStatus
     {
       tickets: 0,
       story_points: 0,
-      task_force: 0,
-      kleinkram: 0
+      task_force: 0
     }
   end
 
