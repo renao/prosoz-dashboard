@@ -1,6 +1,6 @@
 require 'httparty'
 require 'json'
-require 'time'
+require 'business_time'
 
 class RemainingDays
 
@@ -16,8 +16,8 @@ class RemainingDays
       sprint_json = get_active_sprint_for_view(view_json['id'])
       if (sprint_json)
         sprint_name = sprint_json['name']
-        days_json = get_remaining_days(view_json['id'], sprint_json['id'])
-        days = days_json['days']
+        endDate = get_active_sprint_endDate(sprint_json['id'])
+        days = get_business_days_until(endDate)
         formatted_days = (days == 1) ? '1 Tag' : "#{days} Tage"
       end
     end
@@ -29,6 +29,10 @@ class RemainingDays
   end
 
   private
+
+  def get_business_days_until(endDate)
+    return DateTime.now.business_days_until(Date.parse(endDate))
+  end
 
   def get_response_for(resource)
     HTTParty.get(resource, basic_auth: @sprint.jira_auth)
@@ -46,9 +50,10 @@ class RemainingDays
     sprints.find { |sprint| sprint['state'] == 'ACTIVE'}
   end
   
-  def get_remaining_days(view_id, sprint_id)
-    response = get_response_for(remaining_days_url(view_id, sprint_id))
-    JSON.parse(response.body)
+  def get_active_sprint_endDate(sprint_id)
+    response = get_response_for(sprint_url(sprint_id))
+    sprint = JSON.parse(response.body)
+    sprint['endDate']
   end
 
   def sprint_meta_url
@@ -59,7 +64,7 @@ class RemainingDays
     @sprint.jira_resource "rest/greenhopper/1.0/sprintquery/#{view_id}"
   end
 
-  def remaining_days_url(view_id, sprint_id)
-    @sprint.jira_resource "rest/greenhopper/1.0/gadgets/sprints/remainingdays?rapidViewId=#{view_id}&sprintId=#{sprint_id}"
+  def sprint_url(sprint_id)
+    @sprint.jira_resource "rest/agile/1.0/sprint/#{sprint_id}"
   end
 end
