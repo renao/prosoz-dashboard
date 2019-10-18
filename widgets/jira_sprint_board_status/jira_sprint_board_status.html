@@ -1,5 +1,11 @@
 <div class="sprint-status">
         <div class="sprint-status-column">
+            <div class="sprint-state-icon">
+                <i style="visibility: hidden;" class="fas fa-running"></i>
+            </div>
+            <div class="sprint-state-label">
+                    &nbsp;
+                </div>
             <div class="sprint-state-explanation">
                 Tickets
             </div>
@@ -9,13 +15,13 @@
             <div class="sprint-state-explanation">
                 TaskForce
             </div>
-            <div class="sprint-state-explanation">
-                Kleinkram
-            </div>
         </div>
     <div class="sprint-status-column">
+        <div class="sprint-state-icon">
+            <i class="fas fa-running"></i>
+        </div>
         <div class="sprint-state-label">
-            Aktueller Sprint
+            Sprint
         </div>
         <div class="sprint-state-value" data-bind="sprintTickets">
             …
@@ -25,9 +31,6 @@
         </div>
         <div class="sprint-state-value" data-bind="sprintTaskForce">
             …
-        </div>
-        <div class="sprint-state-value" data-bind="sprintKleinkram">
-                …
         </div>
     </div>
     
@@ -45,11 +48,8 @@
             …
         </div>
         <div class="sprint-state-value" data-bind="backlogTaskForce">
-                …
-            </div>
-            <div class="sprint-state-value" data-bind="backlogKleinkram">
-                    …
-            </div>
+            …
+        </div>
     </div>
     <div class="sprint-status-column">
         <div class="sprint-state-icon">
@@ -67,9 +67,6 @@
         <div class="sprint-state-value" data-bind="inProgressTaskForce">
             …
         </div>
-        <div class="sprint-state-value" data-bind="inProgressKleinkram">
-                …
-        </div>
     </div>
     <div class="sprint-status-column">
         <div class="sprint-state-icon">
@@ -85,9 +82,6 @@
             …
         </div>
         <div class="sprint-state-value" data-bind="inReviewTaskForce">
-            …
-        </div>
-        <div class="sprint-state-value" data-bind="inReviewKleinkram">
             …
         </div>
     </div>
@@ -107,9 +101,6 @@
         <div class="sprint-state-value" data-bind="inTestTaskForce">
             …
         </div>
-        <div class="sprint-state-value" data-bind="inTestKleinkram">
-                …
-        </div>
     </div>
     <div class="sprint-status-column">
         <div class="sprint-state-icon">
@@ -127,9 +118,7 @@
         <div class="sprint-state-value" data-bind="doneTaskForce">
             …
         </div>
-        <div class="sprint-state-value" data-bind="doneKleinkram">
-            …
-        </div>
     </div>
 </div>
+<div data-bind="updated_at" class="updated_at">...</div>
 
