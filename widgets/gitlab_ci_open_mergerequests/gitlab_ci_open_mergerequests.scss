@@ -2,7 +2,9 @@ $background-color: rgba(167, 212, 236, 0.4);
 $updated-at-color: rgba(255, 255, 255, .5);;
 
 .widget-gitlab-ci-open-mergerequests {
-    .open-merge-requests {        
+    .open-merge-requests {     
+        padding-left: .3rem;
+        padding-right: .3rem;  
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -11,35 +13,77 @@ $updated-at-color: rgba(255, 255, 255, .5);;
     
         .widget_title {
             margin: 1rem;
-            }
+        }
 
         .merge-request {
+            padding: .6rem;
+            margin-top: .2rem;
+            margin-bottom: .2rem;
             background: rgba($color: white, $alpha: 0.2);
-            margin-left: .4rem;
-            margin-right: .4rem;
-            display: flex;
-            align-items: flex-start;
-            flex-direction: row;
-            justify-items: center;
+            display: grid;
+            grid-template-columns: 3rem auto;
+            grid-template-rows: auto auto;
+            gap: .2rem;
+
+            .merge-request-user-info {
+                grid-column: 1;
+                grid-row-start: 1;
+                grid-row-end: span 2;
+                display: flex;
+                align-items: center;
+            }
+
+            .merge-request-base-info {
+                grid-column: 2;
+                grid-row: 1;
+                padding-left: .6rem;
+                padding-right: .6rem;
+                font-size: .8rem;
+                font-family: 'Open Sans';
+                font-weight: 300;
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+
+                .merge-request-id {
+                    &::before {
+                        content: "#";
+                    }
+                }
+        
+                .merge-request-project-name {
+                    &::before {
+                        padding: .2rem;
+                        content: "|";
+                    }
+                }
+            }
     
             .merge-request-user {
-                margin-left: .5rem;
-                padding-top: .5rem;
                 flex-shrink: 0;
                 width: 3rem;
-                height: 100%;
+                height: 3rem;
+
+                .merge-request-user-avatar {
+                    border-radius: 50%;
+                }
+
                 .merge-request-user-empty{
                     font-size: 2.5rem;
                 }
             }
     
             .merge-request-data {
-                padding: .6rem;
-                flex-shrink: 1;
+                padding-left: .6rem;
+                padding-right: .6rem;
+                grid-column: 2;
+                grid-row: 2;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
     
                 .merge-request-meta {
-                    overflow: hidden;
-                    height: 3rem;
+                    height: auto;
                     display: flex;
                     flex-direction: row;
                     align-items: flex-start;
