@@ -32,11 +32,16 @@ class GitlabOpenMergeRequests
 
   def redirect_resources(merge_requests_list)
     if @config['gitlab']['redirect_resources'] == true
+      merge_requests_list.each do |request|
+        if valid_assignee?(request)
+          request['assignee']['avatar_url'].gsub!(@config['gitlab']['redirect']['from'], @config['gitlab']['redirect']['to'])
+        end
+      end
+    end
+  end
 
-    merge_requests_list.each do |request|
-        request['assignee']['avatar_url'].gsub!(@config['gitlab']['redirect']['from'], @config['gitlab']['redirect']['to']) if (request.key?('assignee') && !request['assignee'].nil? && request['assignee'].key?('avatar_url'))
-    end
-    end
+  def valid_assignee?(request)
+    request.key?('assignee') && !request['assignee'].nil? && request['assignee'].key?('avatar_url') && request['assignee']['avatar_url'].nil?
   end
 end
 
