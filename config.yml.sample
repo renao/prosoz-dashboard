@@ -21,6 +21,7 @@ confluence:
 gitlab:
   access_token: service_token
   api_endpoint: http://gitlab_url:port/api/v4
+  fallback_user_avatar_url: http://gitlab_url/assets/no_avatar-hash.png
   redirect_resources: false
   redirect:
     from: http://gitlab_url.com/

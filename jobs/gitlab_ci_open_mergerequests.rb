@@ -34,14 +34,26 @@ class GitlabOpenMergeRequests
     if @config['gitlab']['redirect_resources'] == true
       merge_requests_list.each do |request|
         if valid_assignee?(request)
-          request['assignee']['avatar_url'].gsub!(@config['gitlab']['redirect']['from'], @config['gitlab']['redirect']['to'])
+          if (valid_avatar_url?(request['assignee']))
+            request['assignee']['avatar_url'].gsub!(@config['gitlab']['redirect']['from'], @config['gitlab']['redirect']['to'])
+          else
+            request['assignee']['avatar_url'] = fallback_avatar_url
+          end
         end
       end
     end
   end
 
   def valid_assignee?(request)
-    request.key?('assignee') && !request['assignee'].nil? && request['assignee'].key?('avatar_url') && request['assignee']['avatar_url'].nil?
+    request.key?('assignee') && !request['assignee'].nil?
+  end
+
+  def valid_avatar_url?(assignee)
+    assignee.key?('avatar_url') && !assignee['avatar_url'].nil?
+  end
+
+  def fallback_avatar_url
+    @config['gitlab']['fallback_user_avatar_url']
   end
 end
 
