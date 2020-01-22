@@ -80,6 +80,7 @@ $updated-at-color: rgba(255, 255, 255, .5);;
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
+                overflow: hidden;
     
                 .merge-request-meta {
                     height: auto;
