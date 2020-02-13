@@ -5,6 +5,7 @@ class Project
         @id = project_hash['project_id']
         @name = project_hash['name']
         @branches = project_hash['branches']
+
         init_pipelines config
     end
 
