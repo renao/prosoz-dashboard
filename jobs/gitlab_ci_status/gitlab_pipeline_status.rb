@@ -5,7 +5,6 @@ class GitlabPipelineStatus
       @project_id = project_id
       @branch = branch
       @pipelines_endpoint = "#{@config['gitlab']['api_endpoint']}/projects/#{@project_id}/pipelines?ref=#{@branch}"
-      puts @pipelines_endpoint
     end
   
     def retrieve_status
