@@ -1,5 +1,8 @@
 class Project
-    require_relative 'gitlab_pipeline_status'
+    require_relative 'pipeline_status'
+    require_relative 'pipeline_status_fetcher'
+
+    attr_reader :name, :pipeline_states
 
     def initialize(project_hash, config)
         @id = project_hash['project_id']
@@ -9,20 +12,24 @@ class Project
         init_pipelines config
     end
 
-    def update_pipeline_status(pipeline_update_callback)
+    def refresh
         @pipelines.each { |branch, pipeline|
             current_status = pipeline.retrieve_status
-            pipeline_update_callback.call current_status
+            enriched_status = PipelineStatus.new(
+                @name,
+                current_status[:branch],
+                current_status[:status],
+                current_status[:updated_at])
         }
     end
 
     private
     def init_pipelines(config)
         @pipelines = {}
+        @pipeline_states = []
         @branches.each do |branch|
-            @pipelines[branch] = GitlabPipelineStatus.new config, @id, branch
+            @pipelines[branch] = PipelineStatusFetcher.new config, @id, @name, branch
+            @pipeline_states << @pipelines[branch].retrieve_status
         end
     end
-
-    attr_reader :id, :name, :branches
 end

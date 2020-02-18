@@ -1,4 +1,8 @@
-<div data-bind="project" class="project">...</div>
-<div class="ci-status-icon"></div>
-<div data-bind="branch" class="branch">...</div>
-<div data-bind="updated_at" class="updated_at">...</div>
+<ul class="ci-status-list">
+    <li data-foreach-status="ci_states">
+        <div data-bind="status.name">...</div>
+        <div data-bind="status.pipeline">...</div>
+        <div data-bind="status.branch">...</div>
+        <div data-bind="status.updated_at">...</div>
+    </li>
+</ul>
