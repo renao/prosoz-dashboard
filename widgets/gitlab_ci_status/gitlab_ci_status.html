@@ -1,8 +1,13 @@
 <ul class="ci-status-list">
-    <li data-foreach-status="ci_states">
-        <div data-bind="status.name">...</div>
-        <div data-bind="status.pipeline">...</div>
-        <div data-bind="status.branch">...</div>
-        <div data-bind="status.updated_at">...</div>
+    <li data-foreach-project="ci_states">
+        <div class="project">
+            <div class="project-name" data-bind="project.meta.name"></div>
+            <div class="pipelines">
+                <div data-foreach-pipeline="project.pipelines" class="pipeline" data-bind-class="pipeline.pipeline">
+                    <div class="pipeline-icon"></div>
+                    <div class="pipeline-branch" data-bind="pipeline.branch">first letter only?</div>
+                </div>
+            </div>
+        </div>
     </li>
 </ul>

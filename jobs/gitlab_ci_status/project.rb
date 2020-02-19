@@ -2,7 +2,7 @@ class Project
     require_relative 'pipeline_status'
     require_relative 'pipeline_status_fetcher'
 
-    attr_reader :name, :pipeline_states
+    attr_reader :name, :id, :pipeline_states
 
     def initialize(project_hash, config)
         @id = project_hash['project_id']

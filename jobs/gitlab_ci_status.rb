@@ -13,13 +13,14 @@ def refresh_ci_states(projects)
   ci_states = []
   projects.each do |project|
     project.refresh
-    ci_states << project.pipeline_states
+    project_meta = { name: project.name, id: project.id }
+    ci_states << {meta: project_meta, pipelines: project.pipeline_states}
   end
   ci_states
 end
 
 SCHEDULER.every '10s', :first_in => 0 do
   ci_states = refresh_ci_states ci_projects
-  puts ci_states.flatten!
+  puts ci_states
   send_event("CIStatusUpdate", { ci_states: ci_states })
 end
