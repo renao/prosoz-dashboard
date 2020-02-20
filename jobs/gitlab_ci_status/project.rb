@@ -13,13 +13,9 @@ class Project
     end
 
     def refresh
+        @pipeline_states = []
         @pipelines.each { |branch, pipeline|
-            current_status = pipeline.retrieve_status
-            enriched_status = PipelineStatus.new(
-                @name,
-                current_status[:branch],
-                current_status[:status],
-                current_status[:updated_at])
+            @pipeline_states << pipeline.retrieve_status
         }
     end
 
@@ -29,7 +25,7 @@ class Project
         @pipeline_states = []
         @branches.each do |branch|
             @pipelines[branch] = PipelineStatusFetcher.new config, @id, @name, branch
-            @pipeline_states << @pipelines[branch].retrieve_status
+            refresh
         end
     end
 end
