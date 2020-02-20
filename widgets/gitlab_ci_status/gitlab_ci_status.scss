@@ -75,6 +75,7 @@
                 &--running {
                     @extend .pipeline-status;
                     background: #FFFB00;
+                    color: #0003FF;
                     animation: running-blinker 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
 
                     @keyframes running-blinker {  
