@@ -1,36 +1,85 @@
 .widget-gitlab-ci-status {
 
-    padding: .3rem;
+    .ci-states {
+        padding-left: .3rem;
+        padding-right: .3rem;  
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 95%;
+        justify-items: stretch;
+    
+        .ci-status-list {
+            width: 100%;
+        }
+    }
+
+    .widget_title {
+        margin: 1rem;
+    }
 
     .project {
         display: grid;
         grid-template-columns: 50% 50%;
-        grid-template-rows: 2rem;
-        background: rgba(255,255,255,.3);
+        grid-template-rows: auto;
+        background: rgba(255, 255, 255, .15);
+        padding: .6rem;
+        margin: .2rem;
 
-        .project-name {
-            text-align: left;
+        .project-name-container {
+            position: relative;
+
+            .project-name {
+                position: absolute;
+                bottom: .1rem;
+                left: .1rem;
+            }
         }
         .pipelines {
             display: flex;
             align-content: space-around;
-            align-items: center;
+            align-items: flex-end;
             justify-content: center;
 
             &> div {
+                margin: .1rem;
                 flex-grow: 1;
                 flex-shrink: 1;
+                background: rgba(255, 255, 255, .3);
             }
 
-            .pipeline-icon {
-                
+            .pipeline-branch {
+                font-size: 1rem;
+                padding: .1rem;
             }
-            .success {
-                .pipeline-icon::before {
-                    content: "S";
+
+            .pipeline-status {
+                font-size: .6rem;
+                padding: .1rem;
+
+                &--success {
+                    font-size: 0;
+                    @extend .pipeline-status;
+                    background: #37FF00;
                 }
-                .pipeline-branch {
-                    display: none;
+                &--failed {
+                    @extend .pipeline-status;
+                    background: #F43101;
+                    color: #FFFFFF;
+                    animation: blinker 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+                      
+                    @keyframes blinker {
+                        50% { color: #F43101; }
+                    }
+                }
+                &--running {
+                    @extend .pipeline-status;
+                    background: #FFFB00;
+                    animation: running-blinker 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+
+                    @keyframes running-blinker {  
+                        50% { color: #FFFB00; }
+                    }
                 }
             }
         }
