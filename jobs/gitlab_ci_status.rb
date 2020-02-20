@@ -21,6 +21,5 @@ end
 
 SCHEDULER.every '10s', :first_in => 0 do
   ci_states = refresh_ci_states ci_projects
-  puts ci_states
   send_event("CIStatusUpdate", { ci_states: ci_states })
 end
