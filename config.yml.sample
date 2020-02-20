@@ -26,3 +26,15 @@ gitlab:
   redirect:
     from: http://gitlab_url.com/
     to: http://127.0.0.1/
+  ci:
+    projects:
+      - name: "Dashboard"
+        project_id: 1021
+        branches:
+          - master
+          - develop
+      - name: "Dashboard Mock Server"
+        project_id: 2231
+        branches:
+          - master
+          - develop
