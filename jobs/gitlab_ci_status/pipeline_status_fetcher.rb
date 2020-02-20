@@ -37,6 +37,6 @@ class PipelineStatusFetcher
     end
   
     def has_relevant_status?(pipeline)
-      ['success', 'failed'].include?(pipeline['status'])
+      ['success', 'failed', 'running'].include?(pipeline['status'])
     end
   end
