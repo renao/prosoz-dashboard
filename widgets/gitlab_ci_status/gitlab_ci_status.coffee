@@ -1,8 +1,14 @@
 class Dashing.GitlabCIStatus extends Dashing.Widget
 
-  onData: (data) ->
+  ready: ->
 
-    if (data != null && data.status == "success")
-        @node.className = "widget widget-gitlab-ci-status ci-status-success"
+  onData: (data) ->
+    console.log data
+
+  Batman.Filters.classByPipelineStatus = (status) ->
+    if status == 'success'
+      'pipeline-status--success'
+    else if status == 'failed'
+      'pipeline-status--failed'
     else
-        @node.className = "widget widget-gitlab-ci-status ci-status-failed"
+      'pipeline-status--running'
