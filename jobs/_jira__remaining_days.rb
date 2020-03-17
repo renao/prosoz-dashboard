@@ -35,7 +35,7 @@ class RemainingDays
   end
 
   def get_response_for(resource)
-    HTTParty.get(resource, basic_auth: @sprint.jira_auth)
+    HTTParty.get(resource, basic_auth: @sprint.jira_auth, :verify => false)
   end
 
   def get_sprint_meta
