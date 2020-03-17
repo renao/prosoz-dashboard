@@ -21,7 +21,7 @@ class CurrentVersion
   private
 
   def get_response_for(resource)
-    HTTParty.get(resource, basic_auth: @sprint.jira_auth)
+    HTTParty.get(resource, basic_auth: @sprint.jira_auth, :verify => false)
   end
 
   def latest_released_version(versions_json)

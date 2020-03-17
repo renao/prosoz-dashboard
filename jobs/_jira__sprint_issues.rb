@@ -23,7 +23,7 @@ class SprintIssues
   private
 
   def get_response_for(resource)
-    HTTParty.get(resource, basic_auth: @sprint.jira_auth)
+    HTTParty.get(resource, basic_auth: @sprint.jira_auth, :verify => false)
   end
 
   def get_view_for_viewid(view_id)
