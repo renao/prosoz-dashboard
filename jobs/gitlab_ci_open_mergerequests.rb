@@ -7,7 +7,7 @@ class GitlabOpenMergeRequests
   def initialize(config, project_id)
     @config = config
     @project_id = project_id
-    @mergerequest_endpoint = "#{@config['gitlab']['api_endpoint']}/projects/#{@project_id}/merge_requests?state=opened"
+    @mergerequest_endpoint = "#{@config['gitlab']['api_endpoint']}/projects/#{@project_id}/merge_requests?state=opened&wip=no"
   end
 
   def retrieve_open_mergerequests
